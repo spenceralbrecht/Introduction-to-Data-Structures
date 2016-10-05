@@ -11,5 +11,5 @@ Recursion: Recursion.class
 	chmod +x Recursion
 Recursion.class: Recursion.java
 	javac Recursion.java
-clean
+clean:
 	rm -f Recursion Recursion.class
