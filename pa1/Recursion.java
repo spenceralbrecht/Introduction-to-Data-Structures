@@ -28,7 +28,7 @@ class Recursion {
    }
 
    static void reverseArray1(int[] X, int n, int[] Y) {
-      if (n == 0) {
+      if (n == 0 || n < 0) {
          return;
       }
       else {
@@ -38,7 +38,7 @@ class Recursion {
    }
 
    static void reverseArray2(int[] X, int n, int[] Y) {
-      if (n == 0) {
+      if (n == 0 || n < 0) {
          return;
       }
       else {
@@ -63,7 +63,7 @@ class Recursion {
    }
 
    static int maxArrayIndex(int[] X, int p, int r) {
-      if (p == r) {
+      if (p == r || p < r) {
          return p;
       }
       else {
@@ -80,7 +80,7 @@ class Recursion {
    }
 
    static int minArrayIndex(int[] X, int p, int r) {
-      if (p == r) {
+      if (p == r || p < r) {
          return p;
       }
       else {
@@ -95,4 +95,5 @@ class Recursion {
          }
       }
    }
+
 }
