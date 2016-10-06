@@ -1,3 +1,11 @@
+// -------------------------------------------
+// Spencer Albrecht
+// salbrecht
+// 12B
+// Recursion.java
+// Reverses arrays in different ways for pa1
+// --------------------------------------------
+
 import java.util.Arrays;
 
 class Recursion {
@@ -27,6 +35,8 @@ class Recursion {
       System.out.println();
    }
 
+   // Reverses part of an array by copying the leftmost
+   // n elements in X to the rightmost positions in Y
    static void reverseArray1(int[] X, int n, int[] Y) {
       if (n == 0 || n < 0) {
          return;
@@ -37,6 +47,8 @@ class Recursion {
       }
    }
 
+   // Reverses part of an array by copying the rightmost
+   // n elemnts in Y to the leftmost positions in X
    static void reverseArray2(int[] X, int n, int[] Y) {
       if (n == 0 || n < 0) {
          return;
@@ -47,6 +59,7 @@ class Recursion {
       }
    }
 
+   // Reverses an array recursively
    static void reverseArray3(int[] X, int i, int j) {
       if (i+1 == j || i == j) {
          int temp = X[i];
@@ -61,7 +74,9 @@ class Recursion {
          reverseArray3(X, i+1, j-1);
       }
    }
-
+   
+   // Finds the index of the largest item in an array
+   // similar to mergesort
    static int maxArrayIndex(int[] X, int p, int r) {
       if (p == r || p < r) {
          return p;
@@ -79,6 +94,8 @@ class Recursion {
       }
    }
 
+   // Finds the index of the smallest item in an array
+   // similar to mergesort
    static int minArrayIndex(int[] X, int p, int r) {
       if (p == r || p < r) {
          return p;
