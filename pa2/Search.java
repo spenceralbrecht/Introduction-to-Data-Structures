@@ -1,27 +1,13 @@
 // ----------------------------------------------
-// PROGRAM OPERATION
-// Program will take a file and target words as
-// command line arguments. Then it will search
-// through the given file for the target words
-// and print to standard out whether each target
-// word was found and on what line it was found.
+// Search.java
+// Spencer Albrecht
+// salbrech
+// pa2
+// Searches through lines of a file and
+// prints if target words are found and
+// what line number
 // ----------------------------------------------
-//
-// ----------------------------------------------
-// PLAN
-// 1. (DONE) Determine the number of lines in the input file
-// 2. (DONE) Create a string array of that length
-// 3. (DONE) Scan the file again and store each word in
-//    the string array
-// 4. (DONE) Sort the string array that contains all the
-//    words using a mergesort algorithm
-// 5. Use binary sort to see if the target words are
-//    in the sorted string array
-// 6. If binary search is not successful it will return
-//    -1, so just check if that value to see if the target
-//    was found
-// 7. To be continued...
-// --------------------------------------------------
+
 import java.util.Scanner;
 import java.util.Arrays;
 import java.io.*;
@@ -42,15 +28,19 @@ class Search {
         line_number[i] = i+1;
       }
 
-      System.out.println(Arrays.toString(line_number));
-
       // closes the scanner
       in.close();
+
+      // System.out.println("unsorted string is");
+      // System.out.println(Arrays.toString(string_array));
 
       mergeSort(string_array,line_number, 0, string_array.length-1);
 
       // System.out.println("Sorted string is");
       // System.out.println(Arrays.toString(string_array));
+      //
+      // System.out.println("line number is");
+      // System.out.println(Arrays.toString(line_number));
 
 
 
@@ -86,7 +76,7 @@ class Search {
      // Calculates the size of the right side and creates
      // a properly sized array
      int right_size= end-mid;
-      int[] right_ln = new int[right_size];
+     int[] right_ln = new int[right_size];
      String[] right = new String[right_size];
 
      int i,j;
@@ -119,11 +109,11 @@ class Search {
          // and stores it in the main array
          if( left[i].compareTo(right[j])<0 ){
            A[k] = left[i];
-           line_number[i] = left_ln[i];
+           line_number[k] = left_ln[i];
            i++;
          }else{
            A[k] = right[j];
-           line_number[i] = right_ln[j];
+           line_number[k] = right_ln[j];
            j++;
          }
        }
@@ -131,12 +121,12 @@ class Search {
        // arrays into the main array
        else if( i<left_size ){
          A[k] = left[i];
-         line_number[i] = left_ln[i];
+         line_number[k] = left_ln[i];
          i++;
        }
        else{ // j<right_size
          A[k] = right[j];
-         line_number[i] = left_ln[j];
+         line_number[k] = left_ln[j];
          j++;
        }
      }
