@@ -37,52 +37,56 @@ class Search {
       // split s into individual lines
       String[] string_array = s.split("(\r\n)|\n");
 
+      int[] line_number = new int[string_array.length];
+      for (int i = 0; i < line_number.length; i++) {
+        line_number[i] = i+1;
+      }
+
+      System.out.println(Arrays.toString(line_number));
+
       // closes the scanner
       in.close();
 
-      String[] target_array = {"apple","banana"};
+      mergeSort(string_array,line_number, 0, string_array.length-1);
 
-      // System.out.println("The string array was created");
+      // System.out.println("Sorted string is");
       // System.out.println(Arrays.toString(string_array));
 
-      mergeSort(string_array, 0, string_array.length-1);
-
-      System.out.println("Sorted string is");
-      System.out.println(Arrays.toString(string_array));
 
 
-
-      for (int i = 0; i < target_array.length; i++) {
-        int return_val = binarySearch(string_array, 0, string_array.length-1, target_array[i]);
+      for (int i = 1; i < args.length; i++) {
+        int return_val = binarySearch(string_array, 0, string_array.length-1, args[i]);
         if (return_val < 0 ) {
-          System.out.println("not found");
+          System.out.println(args[i]+" not found");
         }
         else {
-          System.out.println("found");
+          System.out.println(args[i]+" found on line "+line_number[return_val]);
         }
       }
 
    }
 
-   public static void mergeSort(String[] array, int start, int end){
+   public static void mergeSort(String[] array, int[] line_number, int start, int end){
      if(start < end) {
        int mid = (start+end)/2;
        // System.out.println(p+" "+q+" "+r);
-       mergeSort(array, start, mid);
-       mergeSort(array, mid+1, end);
-       merge(array, start, mid, end);
+       mergeSort(array, line_number, start, mid);
+       mergeSort(array, line_number, mid+1, end);
+       merge(array, line_number, start, mid, end);
      }
    }
 
-   public static void merge(String[] A, int start, int mid, int end){
+   public static void merge(String[] A, int[] line_number, int start, int mid, int end){
      // Calculates the size of the left side and creates
      // a properly sized array
      int left_size = mid-start+1;
+     int[] left_ln = new int[left_size];
      String[] left = new String[left_size];
 
      // Calculates the size of the right side and creates
      // a properly sized array
      int right_size= end-mid;
+      int[] right_ln = new int[right_size];
      String[] right = new String[right_size];
 
      int i,j;
@@ -90,6 +94,7 @@ class Search {
      // Copies the data on the left side into the left array
      for(i=0; i<left_size; i++){
        left[i] = A[start+i];
+       left_ln[i] = line_number[start+i];
       //  System.out.println("left array is ");
       //  System.out.println(Arrays.toString(left));
      }
@@ -97,6 +102,7 @@ class Search {
      // Copies the data on the right side into the right array
      for(j=0; j<right_size; j++){
        right[j] = A[mid+j+1];
+       right_ln[j] = line_number[mid+j+1];
       //  System.out.println("right array is ");
       //  System.out.println(Arrays.toString(right));
      }
@@ -113,9 +119,11 @@ class Search {
          // and stores it in the main array
          if( left[i].compareTo(right[j])<0 ){
            A[k] = left[i];
+           line_number[i] = left_ln[i];
            i++;
          }else{
            A[k] = right[j];
+           line_number[i] = right_ln[j];
            j++;
          }
        }
@@ -123,10 +131,12 @@ class Search {
        // arrays into the main array
        else if( i<left_size ){
          A[k] = left[i];
+         line_number[i] = left_ln[i];
          i++;
        }
        else{ // j<right_size
          A[k] = right[j];
+         line_number[i] = left_ln[j];
          j++;
        }
      }
