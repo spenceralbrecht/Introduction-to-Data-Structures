@@ -31,19 +31,10 @@ class Search {
       // closes the scanner
       in.close();
 
-      // System.out.println("unsorted string is");
-      // System.out.println(Arrays.toString(string_array));
-
       mergeSort(string_array,line_number, 0, string_array.length-1);
 
-      // System.out.println("Sorted string is");
-      // System.out.println(Arrays.toString(string_array));
-      //
-      // System.out.println("line number is");
-      // System.out.println(Arrays.toString(line_number));
-
-
-
+      // Loops that runs through the command line args that has the
+      // target arrays and prints results
       for (int i = 1; i < args.length; i++) {
         int return_val = binarySearch(string_array, 0, string_array.length-1, args[i]);
         if (return_val < 0 ) {
@@ -133,16 +124,15 @@ class Search {
    }
 
    public static int binarySearch(String[] A, int start, int end,  String target){
-      int mid;
       if(start > end) {
          return -1;
       }else{
-         mid = (start+end)/2;
+         int mid = (start+end)/2;
          if(target.equals(A[mid])){
             return mid;
          }else if(target.compareTo(A[mid])<0){
             return binarySearch(A, start, mid-1, target);
-         }else{ // target > A[q]
+         }else{ 
             return binarySearch(A, mid+1, end, target);
          }
       }
