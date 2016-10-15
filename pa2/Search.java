@@ -50,6 +50,18 @@ class Search {
       System.out.println("Sorted string is");
       System.out.println(Arrays.toString(string_array));
 
+
+
+      for (int i = 0; i < target_array.length; i++) {
+        int return_val = binarySearch(string_array, 0, string_array.length-1, target_array[i]);
+        if (return_val < 0 ) {
+          System.out.println("not found");
+        }
+        else {
+          System.out.println("found");
+        }
+      }
+
    }
 
    public static void mergeSort(String[] array, int start, int end){
@@ -118,6 +130,22 @@ class Search {
          j++;
        }
      }
+   }
+
+   public static int binarySearch(String[] A, int start, int end,  String target){
+      int mid;
+      if(start > end) {
+         return -1;
+      }else{
+         mid = (start+end)/2;
+         if(target.equals(A[mid])){
+            return mid;
+         }else if(target.compareTo(A[mid])<0){
+            return binarySearch(A, start, mid-1, target);
+         }else{ // target > A[q]
+            return binarySearch(A, mid+1, end, target);
+         }
+      }
    }
 
 }
