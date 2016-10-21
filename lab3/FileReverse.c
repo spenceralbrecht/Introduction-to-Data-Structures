@@ -15,6 +15,7 @@ void stringReverse(char* s) {
     char temp = s[j];
     s[j] = s[i];
     s[i] = temp;
+    j--;
   }
 }
 
