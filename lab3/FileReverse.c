@@ -7,6 +7,7 @@
 */
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 void stringReverse(char* s) {
   int i,j;
@@ -15,9 +16,8 @@ void stringReverse(char* s) {
   for (int i=0; i<j; i++) {
     char temp = s[j];
     s[j] = s[i];
-    s[i] = s[j];
+    s[i] = temp;
   }
-  return(EXIT_SUCCESS);
 }
 
 int main(int argc, char* argv[]){
@@ -47,7 +47,8 @@ int main(int argc, char* argv[]){
 
   /* read words from input file, print on separate lines to output file*/
   while(fscanf(in, " %s", word) != EOF){
-    fprintf(out, "%s\n", stringReverse(word));
+    stringReverse(word);
+    fprintf(out, "%s\n", word);
   }
 
   /* close input and output files */
