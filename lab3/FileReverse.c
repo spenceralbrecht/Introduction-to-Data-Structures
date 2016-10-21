@@ -10,9 +10,7 @@
 #include<string.h>
 
 void stringReverse(char* s) {
-  int i,j;
-  i = 0;
-  j = strlen(s)-1;
+  int j = strlen(s)-1;
   for (int i=0; i<j; i++) {
     char temp = s[j];
     s[j] = s[i];
