@@ -12,10 +12,10 @@ int main(int argc, char* argv[]){
 		FILE* in;
 		FILE* out;
 		char* line;
-		char* alpha_nums;
-		char* characters;
-	 	char* digits;
-		char* spaces;
+		char* character;
+		char* punctuation;
+	 	char* digit;
+		char* space;
 
 		
 		// open input file for reading 
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
    		line = calloc(MAX_STRING_LENGTH+1, sizeof(char));
 		// allocation for character, punctuation, digit, and space string
    		character = calloc(MAX_STRING_LENGTH+1, sizeof(char));
-   		punctuation = calloc(MAX_STRING_LENGTH+1, sizeof(char))
+   		punctuation = calloc(MAX_STRING_LENGTH+1, sizeof(char));
 		digit = calloc(MAX_STRING_LENGTH+1, sizeof(char));
 		space = calloc(MAX_STRING_LENGTH+1, sizeof(char));
 		assert( line!=NULL && character!=NULL && punctuation!=NULL && digit!=NULL && space!=NULL );
@@ -43,12 +43,14 @@ int main(int argc, char* argv[]){
   		while( fgets(line, MAX_STRING_LENGTH, in) != NULL ){
 			fprintf(out, "Line %d contains:\n", count);
       			extract_chars(line, character, digit, punctuation, space);
-      			fprintf(out, "%s\n", alpha_num);
    		}
 		
 		// free heap memory 
 	    	free(line);
-  	 	free(alpha_num);
+  	 	free(character);
+		free(punctuation);
+		free(digit);
+		free(space);
 
   		// close input and output files 
   	 	fclose(in);
@@ -71,5 +73,5 @@ int main(int argc, char* argv[]){
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
-
+	return EXIT_SUCCESS;
 }
