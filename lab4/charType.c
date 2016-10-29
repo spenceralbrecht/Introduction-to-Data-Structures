@@ -10,23 +10,15 @@
 void extract_chars(char* s, char* a, char* d, char* p, char* w);
 
 int main(int argc, char* argv[]){
-	char ch;
-	int i, j; 
 	int count = 1;
 	if( argc>1 ) {
 		FILE* in;
 		FILE* out;
 		char* line;
-		int l_counter;
 		char* character;
-		int c_counter;
 		char* punctuation;
-		int p_counter;
 	 	char* digit;
-		int d_counter;
 		char* space;
-		int s_counter;
-
 		
 		// open input file for reading 
 		if( (in=fopen(argv[1], "r"))==NULL ){
@@ -51,9 +43,16 @@ int main(int argc, char* argv[]){
 
    		// read each line in input file, extract alpha-numeric characters 
   		while( fgets(line, MAX_STRING_LENGTH, in) != NULL ){
-			fprintf(out, "Line %d contains:\n", count);
+			// call the extract chars that will appropriately separate the chars
       			extract_chars(line, character, digit, punctuation, space);
+			// print the output that shows the count of each line
+			fprintf(out, "Line %d contains: ", count);
+			fprintf(out, "\n%d alphabetic characters: ", strlen(character));
+			fprintf(out, "\n%d numberic characters: ", strlen(digit));
+			fprintf(out, "\n%d punctuation characters: ", strlen(punctuation));
+			fprintf(out, "\n%d whitespace characters: ", strlen(space));
 			count++;
+			fprintf(out, "\n");
    		}
 		
 		// free heap memory 
@@ -67,25 +66,12 @@ int main(int argc, char* argv[]){
   	 	fclose(in);
    		fclose(out);	 
 
-	   /*
-			ch = argv[i][0];
-			count = j = 0;
-			while( ch!='\0' ) {
-			if(isalnum((int)ch)) {
-				count++;
-			}
-			ch = argv[i][++j];
-			}
-			printf("%s contains %d alphanumeric and ", argv[i], count);
-			printf("%d non-alphanumeric characters\n", strlen(argv[i])-count);
-	
-     	*/
 	return EXIT_SUCCESS;
 	}
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
-	int line_counter = 0; 
+	int i = 0; 
 	int alpha_counter = 0;
 	int digit_counter = 0;
 	int punct_counter = 0;
