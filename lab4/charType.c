@@ -17,10 +17,15 @@ int main(int argc, char* argv[]){
 		FILE* in;
 		FILE* out;
 		char* line;
+		int l_counter;
 		char* character;
+		int c_counter;
 		char* punctuation;
+		int p_counter;
 	 	char* digit;
+		int d_counter;
 		char* space;
+		int s_counter;
 
 		
 		// open input file for reading 
@@ -80,4 +85,25 @@ int main(int argc, char* argv[]){
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
+	int line_counter = 0; 
+	int alpha_counter = 0;
+	int digit_counter = 0;
+	int punct_counter = 0;
+	int space_counter = 0;
+	while(s[i]!='\0' && i<MAX_STRING_LENGTH) {
+		if(isalpha(s[i])) {
+			a[alpha_counter++]=s[i];
+		}
+		else if(isdigit(s[i])) {
+			d[digit_counter++]=s[i];
+		}
+		else if(ispunct(s[i])) {
+			p[punct_counter++]=s[i];
+		}
+		else if(isspace(s[i])) {
+			w[space_counter++]=s[i];
+		}
+		i++;
+	}
 }
+
