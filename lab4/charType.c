@@ -46,11 +46,15 @@ int main(int argc, char* argv[]){
 			// call the extract chars that will appropriately separate the chars
       			extract_chars(line, character, digit, punctuation, space);
 			// print the output that shows the count of each line
-			fprintf(out, "Line %d contains: ", count);
-			fprintf(out, "\n%d alphabetic characters: ", strlen(character));
-			fprintf(out, "\n%d numberic characters: ", strlen(digit));
-			fprintf(out, "\n%d punctuation characters: ", strlen(punctuation));
-			fprintf(out, "\n%d whitespace characters: ", strlen(space));
+			fprintf(out, "line %d contains: ", count);
+			fprintf(out, "\n%d alphabetic %s: ", strlen(character), (strlen(character)==1) ? "character": "characters");
+			fprintf(out, "%s", character);
+			fprintf(out, "\n%d numeric %s: ", strlen(digit), (strlen(digit)==1) ? "character": "characters");
+			fprintf(out, "%s", digit);
+			fprintf(out, "\n%d punctuation %s: ", strlen(punctuation), (strlen(punctuation)==1) ? "character": "characters");
+			fprintf(out, "%s", punctuation);
+			fprintf(out, "\n%d whitespace %s: ", strlen(space), (strlen(space)==1) ? "character": "characters");
+			fprintf(out, "%s", space);
 			count++;
 			fprintf(out, "\n");
    		}
