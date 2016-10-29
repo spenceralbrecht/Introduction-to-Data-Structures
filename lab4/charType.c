@@ -5,6 +5,9 @@
 
 #define MAX_STRING_LENGTH 100
 
+// function prototype
+void extract_chars(char* s, char* a, char* d, char* p, char* w);
+
 int main(int argc, char* argv[]){
 	char ch;
 	int i, j, count;
@@ -73,5 +76,4 @@ int main(int argc, char* argv[]){
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
-	return EXIT_SUCCESS;
 }
