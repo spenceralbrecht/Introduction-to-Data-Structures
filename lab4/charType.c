@@ -6,8 +6,8 @@
 #define MAX_STRING_LENGTH 100
 
 int main(int argc, char* argv[]){
-char ch;
-int i, j, count;
+	char ch;
+	int i, j, count;
 	if( argc>1 ) {
 		FILE* in;
 		FILE* out;
@@ -20,32 +20,34 @@ int i, j, count;
 		
 		// open input file for reading 
 		if( (in=fopen(argv[1], "r"))==NULL ){
-     		printf("Unable to read from file %s\n", argv[1]);
-      		exit(EXIT_FAILURE);
+     			printf("Unable to read from file %s\n", argv[1]);
+      			exit(EXIT_FAILURE);
    		}
 
    		// open output file for writing 
    		if( (out=fopen(argv[2], "w"))==NULL ){
-      		printf("Unable to write to file %s\n", argv[2]);
-      		exit(EXIT_FAILURE);
+      			printf("Unable to write to file %s\n", argv[2]);
+      			exit(EXIT_FAILURE);
    		}
 			
-		// allocate strings line and alpha_num on the heap 
+		// allocate string line that will contain the original file line 
    		line = calloc(MAX_STRING_LENGTH+1, sizeof(char));
-   		alpha_character = calloc(MAX_STRING_LENGTH+1, sizeof(char));
+		// allocation for character, punctuation, digit, and space string
+   		character = calloc(MAX_STRING_LENGTH+1, sizeof(char));
    		punctuation = calloc(MAX_STRING_LENGTH+1, sizeof(char))
 		digit = calloc(MAX_STRING_LENGTH+1, sizeof(char));
 		space = calloc(MAX_STRING_LENGTH+1, sizeof(char));
-		assert( line!=NULL && alpha_character!=NULL && punctuation!=NULL && digit!=NULL && space!=NULL );
+		assert( line!=NULL && character!=NULL && punctuation!=NULL && digit!=NULL && space!=NULL );
 
    		// read each line in input file, extract alpha-numeric characters 
   		while( fgets(line, MAX_STRING_LENGTH, in) != NULL ){
-      		extract_chars(line, alpha_nums, digits, punctuation, whitespace);
-      		fprintf(out, "%s\n", alpha_num);
+			fprintf(out, "Line %d contains:\n", count);
+      			extract_chars(line, character, digit, punctuation, space);
+      			fprintf(out, "%s\n", alpha_num);
    		}
 		
 		// free heap memory 
-	    free(line);
+	    	free(line);
   	 	free(alpha_num);
 
   		// close input and output files 
@@ -69,6 +71,5 @@ int i, j, count;
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
-
 
 }
