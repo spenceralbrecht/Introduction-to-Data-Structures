@@ -105,5 +105,9 @@ void extract_chars(char* s, char* a, char* d, char* p, char* w) {
 		}
 		i++;
 	}
+	a[alpha_counter]='\0';
+	d[digit_counter]='\0';
+	p[punct_counter]='\0';
+	w[space_counter]='\0';
 }
 
