@@ -2,6 +2,7 @@
 #include<ctype.h>
 #include<stdlib.h>
 #include<string.h>
+#include<assert.h>
 
 #define MAX_STRING_LENGTH 100
 
@@ -10,7 +11,8 @@ void extract_chars(char* s, char* a, char* d, char* p, char* w);
 
 int main(int argc, char* argv[]){
 	char ch;
-	int i, j, count;
+	int i, j; 
+	int count = 1;
 	if( argc>1 ) {
 		FILE* in;
 		FILE* out;
@@ -46,6 +48,7 @@ int main(int argc, char* argv[]){
   		while( fgets(line, MAX_STRING_LENGTH, in) != NULL ){
 			fprintf(out, "Line %d contains:\n", count);
       			extract_chars(line, character, digit, punctuation, space);
+			count++;
    		}
 		
 		// free heap memory 
@@ -73,6 +76,7 @@ int main(int argc, char* argv[]){
 	
      	*/
 	return EXIT_SUCCESS;
+	}
 }
 
 void extract_chars(char* s, char* a, char* d, char* p, char* w) {
