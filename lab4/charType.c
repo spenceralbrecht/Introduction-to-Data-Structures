@@ -31,13 +31,16 @@ int i, j, count;
    		}
 			
 		// allocate strings line and alpha_num on the heap 
-   		line = calloc(MAX_STRING_LENGTH+1, sizeof(char) );
-   		alpha_num = calloc(MAX_STRING_LENGTH+1, sizeof(char) );
-   		assert( line!=NULL && alpha_num!=NULL );
+   		line = calloc(MAX_STRING_LENGTH+1, sizeof(char));
+   		alpha_character = calloc(MAX_STRING_LENGTH+1, sizeof(char));
+   		punctuation = calloc(MAX_STRING_LENGTH+1, sizeof(char))
+		digit = calloc(MAX_STRING_LENGTH+1, sizeof(char));
+		space = calloc(MAX_STRING_LENGTH+1, sizeof(char));
+		assert( line!=NULL && alpha_character!=NULL && punctuation!=NULL && digit!=NULL && space!=NULL );
 
    		// read each line in input file, extract alpha-numeric characters 
   		while( fgets(line, MAX_STRING_LENGTH, in) != NULL ){
-      		extract_alpha_num(line, alpha_num);
+      		extract_chars(line, alpha_nums, digits, punctuation, whitespace);
       		fprintf(out, "%s\n", alpha_num);
    		}
 		
