@@ -9,9 +9,11 @@
 #include<stdlib.h>
 #include<string.h>
 
+// Reverses one string at a time iteratively
 void stringReverse(char* s) {
   int j = strlen(s)-1;
   for (int i=0; i<j; i++) {
+    // basic swap function
     char temp = s[j];
     s[j] = s[i];
     s[i] = temp;
