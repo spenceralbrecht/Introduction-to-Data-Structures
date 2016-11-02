@@ -10,29 +10,29 @@ class DictionaryTest {
     // dict.makeEmpty();
     // System.out.println(dict.lookup("apple"));
     // System.out.println(dict.isEmpty());
-    dict.insert("1","a");
-    dict.insert("2","b");
-    dict.insert("3","c");
-    dict.insert("4","d");
-    dict.insert("5","e");
-    dict.insert("6","f");
-    dict.insert("7","g");
-    System.out.println(dict);
-
-    v = dict.lookup("1");
-    System.out.println("key=1 "+(v==null?"not found":("value="+v)));
-    v = dict.lookup("3");
-    System.out.println("key=3 "+(v==null?"not found":("value="+v)));
-    v = dict.lookup("7");
-    System.out.println("key=7 "+(v==null?"not found":("value="+v)));
-    v = dict.lookup("8");
-    System.out.println("key=8 "+(v==null?"not found":("value="+v)));
-    System.out.println();
-
-    dict.delete("1");
-    dict.delete("3");
-    dict.delete("7");
-    System.out.println(dict);
+    // dict.insert("1","a");
+    // dict.insert("2","b");
+    // dict.insert("3","c");
+    // dict.insert("4","d");
+    // dict.insert("5","e");
+    // dict.insert("6","f");
+    // dict.insert("7","g");
+    // System.out.println(dict);
+    //
+    // v = dict.lookup("1");
+    // System.out.println("key=1 "+(v==null?"not found":("value="+v)));
+    // v = dict.lookup("3");
+    // System.out.println("key=3 "+(v==null?"not found":("value="+v)));
+    // v = dict.lookup("7");
+    // System.out.println("key=7 "+(v==null?"not found":("value="+v)));
+    // v = dict.lookup("8");
+    // System.out.println("key=8 "+(v==null?"not found":("value="+v)));
+    // System.out.println();
+    //
+    // dict.delete("1");
+    // dict.delete("3");
+    // dict.delete("7");
+    // System.out.println(dict);
 
     // System.out.println(dict.isEmpty());
     // System.out.println(dict.size());
