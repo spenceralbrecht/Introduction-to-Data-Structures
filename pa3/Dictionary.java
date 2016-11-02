@@ -1,12 +1,14 @@
 public class Dictionary implements DictionaryInterface {
 
-  // private inner Node class
+  // Private inner Node class
   private class Node {
+    // Fields that store the parameters that each node will contain
     String key;
     String value;
     Node next;
     Node last;
 
+    // Constructor for node with a key and value
     Node(String key, String value){
       this.value = value;
       this.key = key;
@@ -14,6 +16,10 @@ public class Dictionary implements DictionaryInterface {
       this.last = null;
     }
 
+    // Constructor without parameters so that the
+    // nodes created to traverse the linked list
+    // don't need to be created with key and value
+    // parameters
     Node() {
       this.value = null;
       this.key = null;
@@ -22,25 +28,32 @@ public class Dictionary implements DictionaryInterface {
     }
   }
 
-  // fields for the Dictionary class
+  // Fields for the Dictionary class
   private Node head;     // reference to first Node in Dictionary
   private Node tail;     // reference to last Node in Dictionary
   private int numItems;  // number of items in current Dictionary
 
+  // Constructor for a Dictionary object. Initialized with
+  // default fields
   public Dictionary() {
     head = null;
     tail = null;
     numItems = 0;
   }
 
+  // Private method that is used by lookup, insert, and delete
+  // to find and return a node with a specific key
   private Node findKey(String key) {
+    // If numItems < 0, the key will not be found
     if (numItems > 0) {
+      // Create a new node that will travel through the linked
+      // list checking for matches
       Node finder = new Node();
       finder = head;
-      // System.out.println("we are searching for value "+key);
+      // Loop through each node until the end of the list is reached
       while(finder!=null) {
-        // System.out.println("finder value is equal to "+finder.key);
-        // System.out.println("loop ran once");
+        // Check the key on each node and compary to target.
+        // Return Node object if found
         if (finder.key.equals(key)) {
           return finder;
         }
@@ -49,6 +62,7 @@ public class Dictionary implements DictionaryInterface {
         }
       }
     }
+    // Only return null if the key was not found
     return null;
   }
 
@@ -70,40 +84,41 @@ public class Dictionary implements DictionaryInterface {
   // pre: none
   // returns value associated key, or null reference if no such key exists
   public String lookup(String key) {
-    // System.out.println("findKey returned "+findKey(key));
-    Node returnNode = findKey(key);
-    // System.out.println("return node initialized to null or value");
-    // System.out.println("numItems = "+numItems);
-    if (numItems>0 && returnNode!=null) {
-      // Node returnNode = findKey(key);
-      // System.out.println("returnNode.value = "+returnNode.value);
-      // System.out.println("Lookup is running");
-      return returnNode.value;
+    // Check if numItems = 0 to avoid calling findKey if not needed
+    if (numItems>0) {
+      Node returnNode = findKey(key);
+      if (returnNode!=null) {
+        return returnNode.value;
+      }
     }
-    else {
-      return null;
-    }
+    // Returns null if Node was not found in list or if numItems = 0
+    return null;
   }
 
   // insert()
   // inserts new (key,value) pair into this Dictionary
   // pre: lookup(key)==null
   public void insert(String key, String value) throws DuplicateKeyException {
+    // Check if a Node with that key is already in the list,
+    // if it is, throw exception
     if (lookup(key)!=null) {
-      System.out.println("insert is throwing exceptions");
-      throw new DuplicateKeyException();
+      throw new DuplicateKeyException("cannot insert duplicate keys");
     }
     else {
-      // System.out.println("insert is running");
       Node newNode = new Node(key, value);
+      // Properly insert at head of current linked list
       if (numItems>0) {
         newNode.next = head;
         head.last = newNode;
       }
+      // If this is the first Node in the list, set next and
+      // last appropriately
       else {
         newNode.next = null;
         tail = newNode;
       }
+      // Because we are inserting at head, our new Node's .last field
+      // will always be set to null
       newNode.last = null;
       head = newNode;
       numItems++;
@@ -114,23 +129,27 @@ public class Dictionary implements DictionaryInterface {
   // deletes pair with the given key
   // pre: lookup(key)==null
   public void delete(String key) throws KeyNotFoundException {
+    // Throws exception if the key we are trying to delete is
+    // not in the list
     if (lookup(key)==null) {
-      throw new KeyNotFoundException();
+      throw new KeyNotFoundException("cannot delete non-existent key");
     }
     else {
+      // Create a new Node a set it equal to the Node we want to delete
       Node tempNode = new Node();
       tempNode = findKey(key);
+      // Special case for if we are deleting the last Node in the list
       if (tail==tempNode) {
         tail = tempNode.last;
         tempNode.last.next = null;
       }
+      // Special case for deleting the first Node in the list
       else if (head==tempNode) {
-        tempNode.next.last = null;
         head = tempNode.next;
+        tempNode.next.last = null;
       }
+      // General case for deleting a Node inside the list
       else {
-        // System.out.println("tempNode = "+tempNode.value);
-        // System.out.println("tempNode.last = "+tempNode.last.value);
         tempNode.last.next = tempNode.next;
         tempNode.next.last = tempNode.last;
       }
@@ -141,7 +160,7 @@ public class Dictionary implements DictionaryInterface {
   // makeEmpty()
   // pre: none
   public void makeEmpty() {
-    head = null;
+    head = tail = null;
     numItems = 0;
   }
 
@@ -151,10 +170,13 @@ public class Dictionary implements DictionaryInterface {
   // pre: none
   public String toString() {
     String returnString = "";
+    // Returns the empty string if numItems < 0
     if (numItems > 0) {
       Node finder = new Node();
       finder = tail;
-      // System.out.println("we are searching for value "+key);
+      // Loop through list backwards to print in the order that
+      // Nodes were added to the list and concatenate key and
+      // value to the returnString
       while(finder!=null) {
         returnString += finder.key+" "+finder.value+"\n";
         finder = finder.last;
