@@ -1,0 +1,3 @@
+class KeyNotFoundException extends RuntimeException {
+
+}

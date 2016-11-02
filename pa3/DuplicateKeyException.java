@@ -1,0 +1,3 @@
+class DuplicateKeyException extends RuntimeException {
+
+}
