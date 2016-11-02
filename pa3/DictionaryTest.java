@@ -34,13 +34,13 @@ class DictionaryTest {
     dict.delete("7");
     System.out.println(dict);
 
-    System.out.println(dict.isEmpty());
-    System.out.println(dict.size());
-    dict.makeEmpty();
-    System.out.println(dict.isEmpty());
-    System.out.println(dict);
+    // System.out.println(dict.isEmpty());
+    // System.out.println(dict.size());
+    // dict.makeEmpty();
+    // System.out.println(dict.isEmpty());
+    // System.out.println(dict);
 
-    dict.insert("2","f");  // causes DuplicateKeyException
+    //dict.insert("2","f");  // causes DuplicateKeyException
     //dict.delete("8");  // causes KeyNotFoundException
 
     // System.out.println("Dictionary size is "+dict.size());

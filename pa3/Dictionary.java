@@ -102,6 +102,7 @@ public class Dictionary implements DictionaryInterface {
     // Check if a Node with that key is already in the list,
     // if it is, throw exception
     if (lookup(key)!=null) {
+      System.out.println("Throwing DKE");
       throw new DuplicateKeyException("cannot insert duplicate keys");
     }
     else {
