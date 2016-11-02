@@ -32,7 +32,10 @@ public class Dictionary implements DictionaryInterface {
     if (numItems > 0) {
       Node finder = new Node();
       finder = head;
-      while(finder.next!=null) {
+      System.out.println("we are searching for value "+key);
+      while(finder!=null) {
+        System.out.println("finder value is equal to "+finder.key);
+        System.out.println("loop ran once");
         if (finder.key.equals(key)) {
           return finder;
         }
@@ -62,6 +65,7 @@ public class Dictionary implements DictionaryInterface {
   // pre: none
   // returns value associated key, or null reference if no such key exists
   public String lookup(String key) {
+    System.out.println("findKey returned "+findKey(key));
     if (numItems>0 && findKey(key)!=null) {
       Node returnNode = findKey(key);
       System.out.println("Lookup is running");
@@ -81,13 +85,15 @@ public class Dictionary implements DictionaryInterface {
       throw new DuplicateKeyException();
     }
     else {
-      System.out.println("insert is running");
+      // System.out.println("insert is running");
       Node newNode = new Node(key, value);
       if (numItems>0) {
         newNode.next = head;
       }
+      else {
+        newNode.next = null;
+      }
       head = newNode;
-      System.out.println("head is equal to"+head.value);
       numItems++;
     }
   }
