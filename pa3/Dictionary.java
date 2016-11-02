@@ -24,10 +24,12 @@ public class Dictionary implements DictionaryInterface {
 
   // fields for the Dictionary class
   private Node head;     // reference to first Node in Dictionary
+  private Node tail;     // reference to last Node in Dictionary
   private int numItems;  // number of items in current Dictionary
 
   public Dictionary() {
     head = null;
+    tail = null;
     numItems = 0;
   }
 
@@ -70,12 +72,12 @@ public class Dictionary implements DictionaryInterface {
   public String lookup(String key) {
     // System.out.println("findKey returned "+findKey(key));
     Node returnNode = findKey(key);
-    System.out.println("return node initialized to null or value");
-    System.out.println("numItems = "+numItems);
+    // System.out.println("return node initialized to null or value");
+    // System.out.println("numItems = "+numItems);
     if (numItems>0 && returnNode!=null) {
       // Node returnNode = findKey(key);
-      System.out.println("returnNode.value = "+returnNode.value);
-      System.out.println("Lookup is running");
+      // System.out.println("returnNode.value = "+returnNode.value);
+      // System.out.println("Lookup is running");
       return returnNode.value;
     }
     else {
@@ -100,6 +102,7 @@ public class Dictionary implements DictionaryInterface {
       }
       else {
         newNode.next = null;
+        tail = newNode;
       }
       newNode.last = null;
       head = newNode;
@@ -117,6 +120,9 @@ public class Dictionary implements DictionaryInterface {
     else {
       Node tempNode = new Node();
       tempNode = findKey(key);
+      if (tail==tempNode) {
+        tail = tempNode.last;
+      }
       tempNode.last.next = tempNode.next;
       numItems--;
     }
@@ -137,11 +143,11 @@ public class Dictionary implements DictionaryInterface {
     String returnString = "";
     if (numItems > 0) {
       Node finder = new Node();
-      finder = head;
+      finder = tail;
       // System.out.println("we are searching for value "+key);
       while(finder!=null) {
         returnString += finder.key+" "+finder.value+"\n";
-        finder = finder.next;
+        finder = finder.last;
       }
     }
     return returnString;
