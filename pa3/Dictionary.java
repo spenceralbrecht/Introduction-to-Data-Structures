@@ -122,8 +122,18 @@ public class Dictionary implements DictionaryInterface {
       tempNode = findKey(key);
       if (tail==tempNode) {
         tail = tempNode.last;
+        tempNode.last.next = null;
       }
-      tempNode.last.next = tempNode.next;
+      else if (head==tempNode) {
+        tempNode.next.last = null;
+        head = tempNode.next;
+      }
+      else {
+        // System.out.println("tempNode = "+tempNode.value);
+        // System.out.println("tempNode.last = "+tempNode.last.value);
+        tempNode.last.next = tempNode.next;
+        tempNode.next.last = tempNode.last;
+      }
       numItems--;
     }
   }
