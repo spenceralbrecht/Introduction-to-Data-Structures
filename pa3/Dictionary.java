@@ -5,17 +5,20 @@ public class Dictionary implements DictionaryInterface {
     String key;
     String value;
     Node next;
+    Node last;
 
     Node(String key, String value){
       this.value = value;
       this.key = key;
       this.next = null;
+      this.last = null;
     }
 
     Node() {
       this.value = null;
       this.key = null;
       this.next = null;
+      this.last = null;
     }
   }
 
@@ -66,9 +69,13 @@ public class Dictionary implements DictionaryInterface {
   // returns value associated key, or null reference if no such key exists
   public String lookup(String key) {
     // System.out.println("findKey returned "+findKey(key));
-    if (numItems>0 && findKey(key)!=null) {
-      Node returnNode = findKey(key);
-      // System.out.println("Lookup is running");
+    Node returnNode = findKey(key);
+    System.out.println("return node initialized to null or value");
+    System.out.println("numItems = "+numItems);
+    if (numItems>0 && returnNode!=null) {
+      // Node returnNode = findKey(key);
+      System.out.println("returnNode.value = "+returnNode.value);
+      System.out.println("Lookup is running");
       return returnNode.value;
     }
     else {
@@ -89,10 +96,12 @@ public class Dictionary implements DictionaryInterface {
       Node newNode = new Node(key, value);
       if (numItems>0) {
         newNode.next = head;
+        head.last = newNode;
       }
       else {
         newNode.next = null;
       }
+      newNode.last = null;
       head = newNode;
       numItems++;
     }
@@ -100,10 +109,16 @@ public class Dictionary implements DictionaryInterface {
 
   // delete()
   // deletes pair with the given key
-  // pre: lookup(key)!=null
+  // pre: lookup(key)==null
   public void delete(String key) throws KeyNotFoundException {
     if (lookup(key)==null) {
       throw new KeyNotFoundException();
+    }
+    else {
+      Node tempNode = new Node();
+      tempNode = findKey(key);
+      tempNode.last.next = tempNode.next;
+      numItems--;
     }
   }
 
@@ -119,6 +134,16 @@ public class Dictionary implements DictionaryInterface {
   // overrides Object's toString() method
   // pre: none
   public String toString() {
-    return "0";
+    String returnString = "";
+    if (numItems > 0) {
+      Node finder = new Node();
+      finder = head;
+      // System.out.println("we are searching for value "+key);
+      while(finder!=null) {
+        returnString += finder.key+" "+finder.value+"\n";
+        finder = finder.next;
+      }
+    }
+    return returnString;
   }
 }
