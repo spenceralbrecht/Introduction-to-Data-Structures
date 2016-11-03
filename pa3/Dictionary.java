@@ -5,7 +5,10 @@
 // All of the methods needed to implement a dictionary
 // with key value pairs as represented by a doubly linked
 // list.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5c710d20a802baa5f457c09b2dff2f7a0cca6b74
 public class Dictionary implements DictionaryInterface {
 
   // Private inner Node class
