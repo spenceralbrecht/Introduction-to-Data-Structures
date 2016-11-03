@@ -169,7 +169,8 @@ public class Dictionary implements DictionaryInterface {
   // makeEmpty()
   // pre: none
   public void makeEmpty() {
-    head = tail = null;
+    head = null;
+    tail = null;
     numItems = 0;
   }
 
