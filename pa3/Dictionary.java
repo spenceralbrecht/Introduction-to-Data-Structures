@@ -1,3 +1,10 @@
+// Spencer Albrecht
+// salbrech
+// PA3
+// Dictionary.java
+// All of the methods needed to implement a dictionary
+// with key value pairs as represented by a doubly linked
+// list.
 public class Dictionary implements DictionaryInterface {
 
   // Private inner Node class

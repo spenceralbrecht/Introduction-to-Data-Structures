@@ -1,3 +1,9 @@
+// Spencer Albrecht
+// salbrech
+// PA3
+// DictionaryTest.java
+// Previous code that I used to test my functions
+// during the development of Dictionary.java
 class DictionaryTest {
   public static void main(String[] args) {
     String v;
