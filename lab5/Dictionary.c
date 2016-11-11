@@ -1,6 +1,9 @@
 //-----------------------------------------------------------------------------
-//   Dictionary.c
-//   Implementation file for Dictionary ADT
+//  Spencer Albrecht
+//  salbrech
+//  Lab5
+//  Dictionary.c
+//  Implementation file for Dictionary ADT
 //-----------------------------------------------------------------------------
 
 #include<stdio.h>

@@ -1,6 +1,9 @@
 //-----------------------------------------------------------------------------
-// Dictionary.h
-// Header file for the Dictionary ADT
+//  Spencer Albrecht
+//  salbrech
+//  Lab5
+//  Dictionary.h
+//  Header file for Dictionary ADT
 //-----------------------------------------------------------------------------
 
 #ifndef _DICTIONARY_H_INCLUDE_
@@ -30,7 +33,7 @@ int isEmpty(Dictionary D);
 int size(Dictionary D);
 
 // lookup()
-// returns the value v such that (k, v) is in D, or returns NULL if no 
+// returns the value v such that (k, v) is in D, or returns NULL if no
 // such value v exists.
 // pre: none
 char* lookup(Dictionary D, char* k);
