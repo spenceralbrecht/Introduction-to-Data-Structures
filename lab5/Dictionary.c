@@ -1,0 +1,245 @@
+//-----------------------------------------------------------------------------
+//   Dictionary.c
+//   Implementation file for Dictionary ADT
+//-----------------------------------------------------------------------------
+
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<assert.h>
+#include"Dictionary.h"
+
+// private types --------------------------------------------------------------
+
+// Creation of NodeObj data type
+typedef struct NodeObj{
+   char key[25];
+   char value[25];
+   struct NodeObj* next;
+   struct NodeObj* last;
+} NodeObj;
+
+// Creation of type "Node" that points to NodeObj
+typedef NodeObj* Node;
+
+// newNode()
+// constructor of the Node type
+Node newNode(char* key, char* value) {
+   Node N = malloc(sizeof(NodeObj));
+   assert(N!=NULL);
+   N->key = key;
+   N->value = value;
+   N->last = NULL;
+   N->next = NULL;
+   return(N);
+}
+
+// freeNode()
+// destructor for the Node type
+void freeNode(Node* pN){
+   if( pN!=NULL && *pN!=NULL ){
+      free(*pN);
+      *pN = NULL;
+   }
+}
+
+Node findKey(Dictionary dict, char* key) {
+   // If the dict is null or is empty return null
+   if (dict!=NULL && !dict.isEmpty()) {
+      // Create a new node that will travel through the linked
+      // list checking for matches
+      Node finder = dict->head;
+      // Loop through each node until the end of the list is reached
+      while(finder!=NULL) {
+         // Check the key on each node and compary to target.
+         // Return Node object if found
+         if (strcmp(finder->key, key)==0) {
+            return finder;
+         }
+         else {
+            finder = finder->next;
+         }
+      }
+   }
+   // Only return null if the key was not found
+   return NULL;
+}
+
+// Creation of the DictionaryObj data type
+typedef struct DictionaryObj{
+   int numItems;
+   struct Node head;
+   struct Node tail;
+} DictionaryObj;
+
+// Creation of type "Dictionary" that points to DictionaryObj
+typedef DictionaryObj* Dictionary;
+
+// newDictionary()
+// Constructor of the Dictionary Type
+Dictionary newDictionary(void) {
+   Dictionary dict = malloc(sizeof(DictionaryObj));
+   assert(dict!=NULL);
+   dict->numItems = 0;
+   dict->head = NULL;
+   dict->tail = NULL;
+   return S;
+}
+
+// freeDictionary()
+// destructor for the Dictionary type
+void freeDictionary(DictionaryObj* pD){
+   if( pD!=NULL && *pD!=NULL ){
+      free(*pD);
+      *pD = NULL;
+   }
+}
+
+// isEmpty()
+// returns 1 (true) if S is empty, 0 (false) otherwise
+// pre: none
+int isEmpty(Dictionary D){
+   if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling isEmpty() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   return(D->numItems==0);
+}
+
+// size()
+// returns the number of (key, value) pairs in D
+// pre: none
+int size(Dictionary D){
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling size() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   return(D->numItems);
+}
+
+// lookup()
+// returns the value v such that (k, v) is in D, or returns NULL if no
+// such value v exists.
+// pre: none
+char* lookup(Dictionary D, char* k) {
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling lookup() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   // Check if numItems = 0 to avoid calling findKey if not needed
+   if (!D.isEmpty()) {
+     Node returnNode = findKey(k);
+     if (returnNode!=null) {
+      return returnNode->value;
+     }
+   }
+   // Returns null if Node was not found in list or if numItems = 0
+   return NULL;
+}
+
+// insert()
+// inserts new (key,value) pair into D
+// pre: lookup(D, k)==NULL
+void insert(Dictionary D, char* k, char* v) {
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling insert() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   // Check if a Node with that key is already in the list,
+   // if it is, print error message and exit
+   if (lookup(k)!=NULL) {
+      fprintf(stderr,
+             "Dictionary Error: calling insert() on NULL Dictionary reference\n");
+     exit(EXIT_FAILURE);
+   }
+   else {
+     // Properly insert at head of current linked list
+     if (!D.isEmpty()) {
+      Node newNode = newNode(k, v);
+      newNode->next = D->head;
+      D->head->last = newNode;
+     }
+     // If this is the first Node in the list, set next and
+     // last appropriately
+     else {
+      newNode->next = NULL;
+      D->tail = newNode;
+     }
+     // Because we are inserting at head, our new Node's .last field
+     // will always be set to null
+     newNode->last = NULL;
+     D->head = newNode;
+     D->numItems++;
+   }
+}
+
+// delete()
+// deletes pair with the key k
+// pre: lookup(D, k)!=NULL
+void delete(Dictionary D, char* k){
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling delete() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   // Prints error and exits if the key we are trying to delete is
+    // not in the list
+    if (lookup(key)==NULL) {
+      fprintf(stderr,
+              "Dictionary Error: calling delete() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+    }
+    else {
+      // Create a new Node a set it equal to the Node we want to delete
+      Node tempNode = findKey(key);
+      // Special case for if we are deleting the last Node in the list
+      if (D->tail==tempNode) {
+        D->tail = tempNode->last;
+        tempNode->last->next = NULL;
+      }
+      // Special case for deleting the first Node in the list
+      else if (D->head==tempNode) {
+        D->head = tempNode->next;
+        tempNode->next->last = NULL;
+      }
+      // General case for deleting a Node inside the list
+      else {
+        tempNode->last->next = tempNode->next;
+        tempNode->next->last = tempNode=->last;
+      }
+      D->numItems--;
+    }
+}
+
+// makeEmpty()
+// re-sets D to the empty state.
+// pre: none
+void makeEmpty(Dictionary D){
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   freeDictionary(D);
+}
+
+// printDictionary()
+// pre: none
+// prints a text representation of D to the file pointed to by out
+void printDictionary(FILE* out, Dictionary D){
+    if( D==NULL ){
+      fprintf(stderr,
+              "Dictionary Error: calling printDictionary() on NULL Dictionary reference\n");
+      exit(EXIT_FAILURE);
+   }
+   Node temp = D.head;
+   while(temp!=NULL) {
+      fprintf(out, "%s %s\n", temp->key, temp->value);
+      temp = temp->next;
+   }
+
+}
