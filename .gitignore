@@ -2,3 +2,10 @@
 DictionaryClient
 *IntegerStack
 *IntegerStackClient
+*.class
+HelloUser
+CommandLineArguments
+FileCopy
+FileReverse
+charType
+Search
