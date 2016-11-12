@@ -239,9 +239,9 @@ void makeEmpty(Dictionary D){
               "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
    }
-   freeDictionary(&D);
    D->head = NULL;
    D->tail = NULL;
+   D->numItems = 0;
 }
 
 // printDictionary()
