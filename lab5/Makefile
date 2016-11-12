@@ -21,4 +21,4 @@ clean :
 	rm -f $(EXEBIN) $(OBJECTS)
 
 check:
-	va
+	valgrind --leak-check=full DictionaryClient
