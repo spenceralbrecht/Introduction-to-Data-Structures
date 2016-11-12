@@ -239,7 +239,9 @@ void makeEmpty(Dictionary D){
               "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
    }
-   freeDictionary(D);
+   freeDictionary(&D);
+   D->head = NULL;
+   D->tail = NULL;
 }
 
 // printDictionary()
@@ -251,10 +253,10 @@ void printDictionary(FILE* out, Dictionary D){
               "Dictionary Error: calling printDictionary() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
    }
-   Node temp = D->head;
+   Node temp = D->tail;
    while(temp!=NULL) {
       fprintf(out, "%s %s\n", temp->key, temp->value);
-      temp = temp->next;
+      temp = temp->last;
    }
 
 }
