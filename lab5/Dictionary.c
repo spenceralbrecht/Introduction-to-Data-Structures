@@ -105,6 +105,9 @@ Dictionary newDictionary(void) {
 // destructor for the Dictionary type
 void freeDictionary(Dictionary* pD){
    if( pD!=NULL && *pD!=NULL ){
+      if(!isEmpty(*pD)) {
+        makeEmpty(*pD);
+      } 
       free(*pD);
       *pD = NULL;
    }
@@ -215,16 +218,19 @@ void delete(Dictionary D, char* k){
       if (D->tail==tempNode) {
         D->tail = tempNode->last;
         tempNode->last->next = NULL;
+        freeNode(&tempNode);
       }
       // Special case for deleting the first Node in the list
       else if (D->head==tempNode) {
         D->head = tempNode->next;
         tempNode->next->last = NULL;
+        freeNode(&tempNode);
       }
       // General case for deleting a Node inside the list
       else {
         tempNode->last->next = tempNode->next;
         tempNode->next->last = tempNode->last;
+        freeNode(&tempNode);
       }
       D->numItems--;
     }
@@ -234,12 +240,17 @@ void delete(Dictionary D, char* k){
 // re-sets D to the empty state.
 // pre: none
 void makeEmpty(Dictionary D){
-    if( D==NULL ){
+   if( D==NULL ){
       fprintf(stderr,
               "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
    }
-   D->head = NULL;
+   Node tempNode;
+   while(D->head!=NULL) {
+      tempNode = D->head;
+      D->head = D->head->next;
+      freeNode(&tempNode);
+   }
    D->tail = NULL;
    D->numItems = 0;
 }

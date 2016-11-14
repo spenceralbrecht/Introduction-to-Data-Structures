@@ -28,6 +28,9 @@ int main(int argc, char* argv[]){
 
    printDictionary(stdout, A);
 
+   makeEmpty(A);
+
+   printDictionary(stdout, A);
   //  for(i=0; i<7; i++){
   //     k = word1[i];
   //     v = lookup(A, k);
