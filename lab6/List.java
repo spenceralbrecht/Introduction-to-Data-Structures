@@ -69,7 +69,7 @@ public class List<T> implements ListInterface<T> {
 
       if( index<1 || index>numItems ){
          throw new ListIndexOutOfBoundsException(
-            "IntegerList Error: get() called on invalid index: " + index);
+            "get() called on invalid index: " + index);
       }
       Node<T> tempNode = find(index);
       return tempNode.item;
@@ -84,7 +84,7 @@ public class List<T> implements ListInterface<T> {
 
       if( index<1 || index>(numItems+1) ){
          throw new ListIndexOutOfBoundsException(
-            "IntegerList Error: add() called on invalid index: " + index);
+            "add() called on invalid index: " + index);
       }
       // case for inserting node at the head
       if(index==1){
@@ -109,7 +109,7 @@ public class List<T> implements ListInterface<T> {
       throws ListIndexOutOfBoundsException{
       if( index<1 || index>numItems ){
          throw new ListIndexOutOfBoundsException(
-            "IntegerList Error: remove() called on invalid index: " + index);
+            "remove() called on invalid index: " + index);
       }
       // case for deleting the node if it's the head
       if(index==1){
