@@ -11,3 +11,6 @@ charType
 Search
 ListTest
 model-out
+input
+*.rpt
+*.trc
