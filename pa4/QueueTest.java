@@ -11,7 +11,7 @@ class QueueTest {
    System.out.println("Is Empty: "+testQueue.isEmpty());
    System.out.println("Length: "+testQueue.length());
    System.out.println("Calling dequeue");
-   testQueue.dequeue();
+   System.out.println(testQueue.dequeue());
    System.out.println(testQueue);
    System.out.println("Is Empty: "+testQueue.isEmpty());
    System.out.println("Length: "+testQueue.length());

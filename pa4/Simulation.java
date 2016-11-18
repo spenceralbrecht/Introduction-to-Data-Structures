@@ -15,12 +15,28 @@ public class Simulation{
 //
 //-----------------------------------------------------------------------------
 
-   public static Job getJob(Scanner in) {
-      String[] s = in.nextLine().split(" ");
-      int a = Integer.parseInt(s[0]);
-      int d = Integer.parseInt(s[1]);
-      return new Job(a, d);
-   }
+ public static Job getJob(Scanner in) {
+    String[] s = in.nextLine().split(" ");
+    int a = Integer.parseInt(s[0]);
+    int d = Integer.parseInt(s[1]);
+    return new Job(a, d);
+ }
+
+ // runs the simulation with the specified number
+ // of processors and prints out the info to the file
+ public void testWithProcessors(int numProcessors, Queue[] inputQueue) {
+   int time = 0;
+   // array of processors that will be running through the
+   // jobs
+   Queue[] mainProcessorArray = new Queue[numProcessors];
+
+   // main queue that all of the processor queues will be pulling
+   // from that has a length = total number of jobs
+   Queue mainWaitQueue = inputQueue;
+
+   // empty queue that will be added to as jobs complete
+   Queue completedQueue = new Queue();
+ }
 
 //-----------------------------------------------------------------------------
 //
@@ -32,6 +48,32 @@ public class Simulation{
 //-----------------------------------------------------------------------------
 
    public static void main(String[] args) throws IOException{
+
+     int m = 3 // number of m jobs
+
+     // stuff that will be read from file later
+     int numJobs = m;
+     int numProcessors = m-1;
+
+     // read each job from input file
+     Job job1 = new Job(2,2);
+     Job job2 = new Job(3,4);
+     Job job3 = new Job(5,6);
+
+     // create a queue to store the original input
+     // data and add each job to it
+     Queue originalInputQueue = new Queue();
+     originalInputQueue.enqueue(job1);
+     originalInputQueue.enqueue(job2);
+     originalInputQueue.enqueue(job3);
+
+     // loop that runs through from 1 to numProcessors
+     // running the simulation each time
+     for (int i = 0; i < numProcessors; i++) {
+       testWithProcessors(i);
+     }
+
+
 
 //    1.  check command line arguments
 //
