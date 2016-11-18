@@ -1,3 +1,9 @@
+// Spencer Albrecht
+// salbrech
+// Queue.java
+// PA4
+// Implements QueueInterface<T> and has methods that allow
+// easy operations on the Queue
 class Queue<T> implements QueueInterface<T> {
 
   private class Node<T> {
@@ -48,6 +54,7 @@ class Queue<T> implements QueueInterface<T> {
       tail.next = insertNode;
       tail = insertNode;
     }
+    numItems++;
   }
 
   // dequeue()
@@ -60,6 +67,7 @@ class Queue<T> implements QueueInterface<T> {
     }
     Node<T> tempNode = head;
     head = head.next;
+    numItems--;
     return tempNode.job;
   }
 
@@ -84,16 +92,16 @@ class Queue<T> implements QueueInterface<T> {
       throw new QueueEmptyException("Queue.java Error: dequeueAll() called on empty queue");
     }
     head = tail = null;
+    numItems = 0;
   }
 
   // toString()
   // overrides Object's toString() method
   public String toString() {
-    System.out.println("Printing out a Queue!");
     Node<T> tracer = head;
     String returnString = "";
     while(tracer!=null) {
-      returnString+=tracer.job.toString();
+      returnString+=tracer.job.toString()+" ";
       tracer = tracer.next;
     }
     return returnString;

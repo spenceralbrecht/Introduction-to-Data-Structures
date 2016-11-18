@@ -8,5 +8,18 @@ class QueueTest {
    testQueue.enqueue(job2);
    testQueue.enqueue(job3);
    System.out.println(testQueue);
+   System.out.println("Is Empty: "+testQueue.isEmpty());
+   System.out.println("Length: "+testQueue.length());
+   System.out.println("Calling dequeue");
+   testQueue.dequeue();
+   System.out.println(testQueue);
+   System.out.println("Is Empty: "+testQueue.isEmpty());
+   System.out.println("Length: "+testQueue.length());
+   System.out.println("Calling peek");
+   System.out.println(testQueue.peek());
+   System.out.println("Calling dequeueAll");
+   testQueue.dequeueAll();
+   System.out.println("Is Empty: "+testQueue.isEmpty());
+   System.out.println("Length: "+testQueue.length());
  }
 }
