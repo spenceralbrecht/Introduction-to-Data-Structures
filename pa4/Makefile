@@ -9,7 +9,7 @@
 #------------------------------------------------------------------------------
 
 JAVAC      = javac 
-MAINCLASS  = Simulation
+MAINCLASS  = QueueTest
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README
 CLASSES    = $(patsubst %.java, %.class, $(JAVASRC))

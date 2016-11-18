@@ -1,4 +1,4 @@
-class Queue implements QueueInterface {
+class Queue<T> implements QueueInterface<T> {
 
   private class Node<T> {
     T job;
@@ -40,8 +40,14 @@ class Queue implements QueueInterface {
   // post: !isEmpty()
   public void enqueue(T newItem) {
     Node<T> insertNode = new Node<T>(newItem);
-    tail.next = insertNode;
-    tail = insertNode;
+    // special case if it is the first node
+    if (numItems==0) {
+      head = tail = insertNode;
+    }
+    else {
+      tail.next = insertNode;
+      tail = insertNode;
+    }
   }
 
   // dequeue()
@@ -54,7 +60,7 @@ class Queue implements QueueInterface {
     }
     Node<T> tempNode = head;
     head = head.next;
-    return tempNode;
+    return tempNode.job;
   }
 
   // peek()
@@ -66,7 +72,7 @@ class Queue implements QueueInterface {
     }
     // Node<T> tempNode = head;
     // return tempNode;
-    return head;
+    return head.job;
   }
 
   // dequeueAll()
@@ -83,6 +89,13 @@ class Queue implements QueueInterface {
   // toString()
   // overrides Object's toString() method
   public String toString() {
-
+    System.out.println("Printing out a Queue!");
+    Node<T> tracer = head;
+    String returnString = "";
+    while(tracer!=null) {
+      returnString+=tracer.job.toString();
+      tracer = tracer.next;
+    }
+    return returnString;
   }
 }

@@ -2,7 +2,7 @@
 // QueueInterface.java
 // interface for the Queue ADT
 //-----------------------------------------------------------------------------
-
+@SuppressWarnings("Overrides")
 public interface QueueInterface<T>{
 
    // isEmpty()
