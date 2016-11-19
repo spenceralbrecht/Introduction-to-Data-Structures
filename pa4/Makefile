@@ -1,20 +1,20 @@
 #------------------------------------------------------------------------------
 #  Makefile for CMPS 12B pa4
 #  This Makefile uses wildcards and pattern substitution, which have not been
-#  explained in any previous assignment.  See the GNU Make tutorial 
+#  explained in any previous assignment.  See the GNU Make tutorial
 #
 #       http://www.gnu.org/software/make/manual/make.html
 #
-#  to learn more about these features. 
+#  to learn more about these features.
 #------------------------------------------------------------------------------
 
-JAVAC      = javac 
-MAINCLASS  = QueueTest
+JAVAC      = javac
+MAINCLASS  = Simulation
 JAVASRC    = $(wildcard *.java)
 SOURCES    = $(JAVASRC) makefile README
 CLASSES    = $(patsubst %.java, %.class, $(JAVASRC))
 JARCLASSES = $(patsubst %.class, %*.class, $(CLASSES))
-JARFILE    = $(MAINCLASS) 
+JARFILE    = $(MAINCLASS)
 
 
 all: $(JARFILE)
