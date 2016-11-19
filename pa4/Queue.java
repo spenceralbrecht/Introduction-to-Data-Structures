@@ -106,4 +106,12 @@ class Queue<T> implements QueueInterface<T> {
     }
     return returnString;
   }
+
+  public void resetJobFinishTimes() {
+    Node<T> tracer = head;
+    while(tracer!=null) {
+      tracer.job.resetFinishTime();
+      tracer = tracer.next;
+    }
+  }
 }

@@ -47,30 +47,108 @@ public class Simulation{
       mainProcessorArray[i] = new Queue();
     }
 
+    // Formatted printing for output
+    //************************************************************
     System.out.println(mainProcessorArray[0].length()+" Jobs:");
     System.out.println(mainProcessorArray[0]);
     System.out.println();
 
     System.out.println("*****************************");
-    System.out.println(numProcessors+(numProcessors==1 ? " processor":" processors"));
+    String correctFormat = (numProcessors==1) ? " processor:" : " processors:";
+    System.out.println(numProcessors+correctFormat);
     System.out.println("*****************************");
 
     System.out.println("time=0");
     printProcessorArray(mainProcessorArray);
+    System.out.println();
+    //************************************************************
 
-    // if the first item in the main wait queue has the correct
-    // start time, deque it and enque it in the processor queue
-    // with the shortest line
-    for (int i = 0; i < mainProcessorArray[0].length(); i++) {
-      Job nextJob = (Job) mainProcessorArray[0].peek();
+    // keeps track of when the state of the main processor array
+    // changes so that we know when to print
+    boolean stateChanged = false;
 
-      if (nextJob.getArrival() == time) {
-        int indexShortestQueue = findSmallestQueue(mainProcessorArray);
-        mainProcessorArray[indexShortestQueue].enqueue(nextJob);
-        mainProcessorArray[0].dequeue();
+    int jobsLeft = mainProcessorArray[0].length();
+
+    boolean jobsStillProcessing = true;
+
+    // loop that will run through the main wait queue and
+    // control the movement of jobs in the array
+    while(jobsStillProcessing) {
+
+      // only move jobs to processors if there are actually jobs left
+      if (jobsLeft > 0) {
+        // controls the movement of jobs that have yet to be processed
+        for (int i = 0; i < mainProcessorArray[0].length(); i++) {
+          Job nextJob = (Job) mainProcessorArray[0].peek();
+
+          // controls movement of jobs that need starting
+          if (nextJob.getArrival() == time) {
+            int indexShortestQueue = findSmallestQueue(mainProcessorArray);
+
+            // if the job is being added to an empty queue, it will
+            // not have to wait and so we can calculate the finish time
+            if (mainProcessorArray[indexShortestQueue].length()==0) {
+              nextJob.computeFinishTime(time);
+            }
+
+            mainProcessorArray[indexShortestQueue].enqueue(nextJob);
+            mainProcessorArray[0].dequeue();
+            stateChanged = true;
+            jobsLeft--;
+          }
+        }
+      }
+
+      // controls the movement of curent jobs that processors
+      // are working on and checks if they are done at the
+      // current time
+      for (int i = 1; i < mainProcessorArray.length; i++) {
+        if (mainProcessorArray[i].length() > 0) {
+          Job currentJob = (Job) mainProcessorArray[i].peek();
+          if (currentJob.getFinish() == time) {
+            // add the job back to the main storage queue which will
+            // now contain both completed and uncompleted jobs
+            mainProcessorArray[0].enqueue(currentJob);
+            mainProcessorArray[i].dequeue();
+
+            // if the queue that just finished the past job still
+            // has other jobs, calculate the finish time of the next
+            // job in the queue
+            if (mainProcessorArray[i].length() > 0) {
+              // store the new job that the processor will work on
+              Job newJob = (Job) mainProcessorArray[i].peek();
+
+              // because the new job is now done waiting, we can
+              // compute the finish time of that job
+              newJob.computeFinishTime(time);
+
+            }
+
+            stateChanged = true;
+          }
+        }
+        // exit loop if the first queue in the array is empty because
+        // all of the others will be empty as well
+        else {
+          if (jobsLeft==0) {
+            jobsStillProcessing = false;
+          }
+        }
+      }
+
+      // prints out the state of all processors if any of the jobs
+      // were started or finished at the current time
+      if (stateChanged) {
+        System.out.println("time="+time);
+        printProcessorArray(mainProcessorArray);
+        System.out.println();
+        // reset the change state back to false so that output
+        // is correctly printed
+        stateChanged = false;
       }
       time++;
     }
+
 
     // empty queue that will be added to as jobs complete
     Queue completedQueue = new Queue();
@@ -123,7 +201,10 @@ public class Simulation{
     originalInputQueue.enqueue(job2);
     originalInputQueue.enqueue(job3);
 
-    testWithProcessors(1,originalInputQueue);
+    for (int i = 1; i < numJobs; i++) {
+      testWithProcessors(i,originalInputQueue);
+      originalInputQueue.resetJobFinishTimes();
+    }
 
     // loop that runs through from 1 to numProcessors
     // running the simulation each time
