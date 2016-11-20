@@ -16,17 +16,15 @@ public class Simulation{
   //
   //-----------------------------------------------------------------------------
 
-  public static Job getJob(Scanner in) {
-    String[] s = in.nextLine().split(" ");
-    int a = Integer.parseInt(s[0]);
-    int d = Integer.parseInt(s[1]);
-    return new Job(a, d);
+  public static Job getJob(String input) {
+    int arrival = Integer.parseInt(input.substring(0,1));
+    int duration = Integer.parseInt(input.substring(2));
+    return new Job(arrival, duration);
   }
 
-
-  public static void printProcessorArray(Queue[] mainProcessorArray) {
+  public static void printProcessorArray(Queue[] mainProcessorArray, PrintWriter output_trc) {
     for (int i = 0; i < mainProcessorArray.length; i++) {
-      System.out.println(i+": "+mainProcessorArray[i]);
+      output_trc.println(i+": "+mainProcessorArray[i]);
     }
   }
 
@@ -45,8 +43,11 @@ public class Simulation{
 
   // runs the simulation with the specified number
   // of processors and prints out the info to the file
-  public static void testWithProcessors(int numProcessors, Queue inputQueue) {
+  public static void testWithProcessors(int numProcessors, Queue inputQueue, PrintWriter output_trc, PrintWriter output_rpt) {
     int time = 0;
+    String totalWait = "";
+    String maxWait = "";
+    String averageWait = "";
     // array of processors that will be running through the
     // jobs
     Queue[] mainProcessorArray = new Queue[numProcessors+1];
@@ -61,17 +62,18 @@ public class Simulation{
       mainProcessorArray[i] = new Queue();
     }
 
-    // Formatted printing for output
+    // Formatted printing for output_trc file
     //************************************************************
-    System.out.println("*****************************");
-    String correctFormat = (numProcessors==1) ? " processor:" : " processors:";
-    System.out.println(numProcessors+correctFormat);
-    System.out.println("*****************************");
+    output_trc.println("*****************************");
+    String correctFormat = (numProcessors==1) ? " processor: " : " processors: ";
+    output_trc.println(numProcessors+correctFormat);
+    output_trc.println("*****************************");
 
-    System.out.println("time=0");
-    printProcessorArray(mainProcessorArray);
-    System.out.println();
+    output_trc.println("time=0");
+    printProcessorArray(mainProcessorArray, output_trc);
+    output_trc.println();
     //************************************************************
+
 
     // keeps track of when the state of the main processor array
     // changes so that we know when to print
@@ -139,24 +141,23 @@ public class Simulation{
         allJobsComplete = checkAllJobsComplete(mainProcessorArray,jobsLeft);
       }
 
-      // System.out.println();
-      // System.out.println("state changed = "+stateChanged);
-      // System.out.println("time="+time);
-      // System.out.println("working processors = "+workingProcessors);
-      // printProcessorArray(mainProcessorArray);
-      // System.out.println();
       // prints out the state of all processors if any of the jobs
       // were started or finished at the current time
       if (stateChanged) {
-        System.out.println("time="+time);
-        printProcessorArray(mainProcessorArray);
-        System.out.println();
+        output_trc.println("time="+time);
+        printProcessorArray(mainProcessorArray, output_trc);
+        output_trc.println();
         // reset the change state back to false so that output
         // is correctly printed
         stateChanged = false;
       }
       time++;
     }
+
+    totalWait = String.valueOf(mainProcessorArray[0].totalWaitTime());
+    maxWait = String.valueOf(mainProcessorArray[0].maxWaitTime());
+    averageWait = String.valueOf(mainProcessorArray[0].averageWaitTime());
+    output_rpt.println(numProcessors+correctFormat+"totalWait="+totalWait+", "+"maxWait="+maxWait+", "+"averageWait ="+averageWait);
 
   }
 
@@ -178,72 +179,62 @@ public class Simulation{
     return index;
   }
 
-  //-----------------------------------------------------------------------------
-  //
-  // The following stub for function main contains a possible algorithm for this
-  // project.  Follow it if you like.  Note that there are no instructions below
-  // which mention writing to either of the output files.  You must intersperse
-  // those commands as necessary.
-  //
-  //-----------------------------------------------------------------------------
 
   public static void main(String[] args) throws IOException{
 
-    int numJobs = 0;
-    int arrival = 0;
-    int duration = 0;
-    String fileName;
     // create a queue to store the original input
     // data and add each job to it
     Queue originalInputQueue = new Queue();
+    int numJobs = 0;
+    Job tempJob;
 
-    // check number of command line arguments is at least 2
+    // check number of command line arguments is at least 1
     if (args.length < 1){
       System.out.println("Usage: Simulation <input file>");
       System.exit(1);
     }
-    else {
-      // save the input file name so that we can write to output
-      // files with the same name
-      fileName = args[0];
-      // open file
-      Scanner in = new Scanner(new File(args[0]));
-      boolean firstLine = true;
-      int lineNumber = 1;
 
-      // read lines from in, write lines to out
-      while( in.hasNextLine() ){
-        if (firstLine) {
-          numJobs = Integer.parseInt(in.nextLine());
-          firstLine = false;
-          lineNumber++;
-        }
-        else {
-          String temp = in.nextLine();
-          if (!temp.isEmpty()) {
-            System.out.println("line read in ="+temp);
-            arrival = Integer.parseInt(temp.substring(0,1));
-            duration = Integer.parseInt(temp.substring(2));
-            Job tempJob = new Job(arrival, duration);
-            originalInputQueue.enqueue(tempJob);
-            lineNumber++;
-          }
-        }
+    // open file
+    Scanner in = new Scanner(new File(args[0]));
+    PrintWriter output_trc = new PrintWriter(new FileWriter(args[0]+".trc"));
+    PrintWriter output_rpt = new PrintWriter(new FileWriter(args[0]+".rpt"));
+
+    numJobs = Integer.parseInt(in.nextLine());
+
+    // read lines from in, write lines to out
+    while( in.hasNextLine() ){
+      String temp = in.nextLine();
+      if (!temp.isEmpty()) {
+        tempJob = getJob(temp);
+        originalInputQueue.enqueue(tempJob);
       }
     }
 
+
     int numProcessors = numJobs-1;
 
-    System.out.println("number of jobs = "+numJobs);
+    output_trc.println("Trace file: "+args[0]+".trc");
+    output_trc.println(originalInputQueue.length()+" Jobs:");
+    output_trc.println(originalInputQueue);
+    output_trc.println();
 
-    System.out.println(originalInputQueue.length()+" Jobs:");
-    System.out.println(originalInputQueue);
-    System.out.println();
+    output_rpt.println("Report file: "+args[0]+".rpt");
+    output_rpt.println(originalInputQueue.length()+" Jobs:");
+    output_rpt.println(originalInputQueue);
+    output_rpt.println();
+    output_rpt.println("***********************************************************");
 
+
+    // loop that runs simulations with 1 to numJobs-1 processors
     for (int i = 1; i < numJobs; i++) {
-      testWithProcessors(i,originalInputQueue);
+      testWithProcessors(i,originalInputQueue,output_trc,output_rpt);
       originalInputQueue.resetJobFinishTimes();
     }
+
+    // close files
+    in.close();
+    output_trc.close();
+    output_rpt.close();
 
     //    1.  check command line arguments
     //

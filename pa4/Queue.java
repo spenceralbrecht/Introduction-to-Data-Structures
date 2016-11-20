@@ -117,7 +117,7 @@ class Queue implements QueueInterface {
     }
   }
 
-  public int totalWaitTime(Queue mainWaitQueue) {
+  public int totalWaitTime() {
     Node tracer = head;
     int sum = 0;
     while(tracer!=null) {
@@ -127,7 +127,7 @@ class Queue implements QueueInterface {
     return sum;
   }
 
-  public int maxWaitTime(Queue mainWaitQueue) {
+  public int maxWaitTime() {
     Node tracer = head;
     int max = 0;
     while(tracer!=null) {
@@ -139,8 +139,9 @@ class Queue implements QueueInterface {
     return max;
   }
 
-  public double averageWaitTime(Queue mainWaitQueue) {
-    double average = totalWaitTime(mainWaitQueue)/(mainWaitQueue.length());
-    return average;
+  public double averageWaitTime() {
+    DecimalFormat dec = new DecimalFormat("#.00");
+    double average = (double)this.totalWaitTime()/(double)this.length();
+    return Double.valueOf(dec.format(average));
   }
 }
