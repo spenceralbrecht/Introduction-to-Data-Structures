@@ -1,11 +1,10 @@
 #------------------------------------------------------------------------------
-#  Makefile for CMPS 12B pa4
-#  This Makefile uses wildcards and pattern substitution, which have not been
-#  explained in any previous assignment.  See the GNU Make tutorial
-#
-#       http://www.gnu.org/software/make/manual/make.html
-#
-#  to learn more about these features.
+#  Spencer Albrecht
+#  salbrech
+#  PA4
+#  Makefile
+#  Makefile for PA4 that creates and compiles everything to
+#  create the simulation JARFILE
 #------------------------------------------------------------------------------
 
 JAVAC      = javac

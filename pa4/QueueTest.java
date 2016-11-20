@@ -1,3 +1,11 @@
+//-----------------------------------------------------------------------------
+// Spencer Albrecht
+// salbrech
+// QueueTest.java
+// PA 4
+// Tests many of the functions in Queue.java for functionality
+// and correctness
+//-----------------------------------------------------------------------------
 class QueueTest {
  public static void main(String[] args) {
    Queue testQueue = new Queue();

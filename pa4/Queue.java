@@ -1,9 +1,12 @@
+//-----------------------------------------------------------------------------
 // Spencer Albrecht
 // salbrech
 // Queue.java
 // PA4
 // Implements QueueInterface<T> and has methods that allow
 // easy operations on the Queue
+//-----------------------------------------------------------------------------
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -86,7 +89,13 @@ class Queue implements QueueInterface {
     return head.job;
   }
 
+  // peekAnywhere()
+  // pre: !isEmpty()
+  // post: returns item at any specified position
   public Job peekAnywhere(int position) {
+    if (numItems < 1) {
+      throw new QueueEmptyException("Queue.java Error: peekAnywhere() called on empty queue");
+    }
     Node tracer = head;
     int counter = 1;
     while(counter < position) {
@@ -120,7 +129,13 @@ class Queue implements QueueInterface {
     return returnString;
   }
 
+  // resetJobFinishTimes()
+  // pre: !isEmpty
+  // post: resets all job finish times in this queue
   public void resetJobFinishTimes() {
+    if (numItems < 1) {
+      throw new QueueEmptyException("Queue.java Error: resetJobFinishTimes() called on empty queue");
+    }
     Node tracer = head;
     while(tracer!=null) {
       tracer.job.resetFinishTime();
@@ -128,9 +143,17 @@ class Queue implements QueueInterface {
     }
   }
 
+  // totalWaitTime()
+  // pre: !isEmpty
+  // post: returns the total wait time of all of the jobs
+  // in this queue
   public int totalWaitTime() {
+    if (numItems < 1) {
+      throw new QueueEmptyException("Queue.java Error: totalWaitTime() called on empty queue");
+    }
     Node tracer = head;
     int sum = 0;
+    // loop through the queue and adds all the wait times
     while(tracer!=null) {
       sum+=tracer.job.getWaitTime();
       tracer = tracer.next;
@@ -138,9 +161,16 @@ class Queue implements QueueInterface {
     return sum;
   }
 
+  // maxWaitTime()
+  // pre: !isEmpty
+  // post: returns the maximum wait time of a job in this queue
   public int maxWaitTime() {
+    if (numItems < 1) {
+      throw new QueueEmptyException("Queue.java Error: maxWaitTime() called on empty queue");
+    }
     Node tracer = head;
     int max = 0;
+    // loops through the queue and looks for highest wait time
     while(tracer!=null) {
       if (tracer.job.getWaitTime() > max) {
         max = tracer.job.getWaitTime();
@@ -150,12 +180,16 @@ class Queue implements QueueInterface {
     return max;
   }
 
+  // averageWaitTime()
+  // pre: !isEmpty
+  // post: returns the average wait time of all jobs in this queue
   public String averageWaitTime() {
+    if (numItems < 1) {
+      throw new QueueEmptyException("Queue.java Error: averageWaitTime() called on empty queue");
+    }
+    // makes sure that the return value has two decimal places
     DecimalFormat dec = new DecimalFormat("0.00");
     dec.setMinimumFractionDigits(2);
-    // NumberFormat nf = NumberFormat.getInstance();
-    // nf.setMinimumFractionDigits(2);
-    // nf.setMinimumFractionDigits(2);
     double average = (double)this.totalWaitTime()/this.length();
     return String.valueOf(dec.format(average));
   }
