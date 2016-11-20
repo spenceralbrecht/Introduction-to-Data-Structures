@@ -17,14 +17,23 @@ public class Simulation{
   //-----------------------------------------------------------------------------
 
   public static Job getJob(String input) {
-    int arrival = Integer.parseInt(input.substring(0,1));
-    int duration = Integer.parseInt(input.substring(2));
+    String[] inputArray = input.split(" ");
+    int arrival = Integer.parseInt(inputArray[0]);
+    int duration = Integer.parseInt(inputArray[1]);
+    // int arrival = Integer.parseInt(input.substring(0,1));
+    // int duration = Integer.parseInt(input.substring(2));
     return new Job(arrival, duration);
+
+    // String[] s = in.nextLine().split(" ");
+		// int a = Integer.parseInt(s[0]);
+		// int d = Integer.parseInt(s[1]);
+		// return new Job(a, d);
   }
 
   public static void printProcessorArray(Queue[] mainProcessorArray, PrintWriter output_trc) {
     for (int i = 0; i < mainProcessorArray.length; i++) {
       output_trc.println(i+": "+mainProcessorArray[i]);
+      // System.out.println(i+": "+mainProcessorArray[i]);
     }
   }
 
@@ -41,26 +50,77 @@ public class Simulation{
     return returnValue;
   }
 
-  // runs the simulation with the specified number
-  // of processors and prints out the info to the file
+  // Runs the simulation with the specified number of processors and prints
+  // out the output to the correct file
   public static void testWithProcessors(int numProcessors, Queue inputQueue, PrintWriter output_trc, PrintWriter output_rpt) {
     int time = 0;
     String totalWait = "";
     String maxWait = "";
     String averageWait = "";
-    // array of processors that will be running through the
-    // jobs
+
+    // Array of processors(queues) that will be handle all of the jobs
     Queue[] mainProcessorArray = new Queue[numProcessors+1];
+    Queue backupQueue = new Queue();
 
-    // processor at index 0 will contain all of the original
-    // jobs from the file input
-    mainProcessorArray[0] = inputQueue;
+    for (int i = 0; i < inputQueue.length(); i++) {
+      backupQueue.enqueue(inputQueue.peekAnywhere(i+1));
+    }
+    int numJobs = inputQueue.length();
 
-    // Loop that creates an empty queue at each position in the
-    // processor array
-    for (int i = 1; i < mainProcessorArray.length; i++) {
+    // // rebuilds inputQueue
+    // for (int i = 0; i < numJobs; i++) {
+    //   Job tempJob = backupQueue.dequeue();
+    //   inputQueue.enqueue(tempJob);
+    // }
+
+    // System.out.println(backupQueue);
+
+    // System.out.println("line 63");
+
+    // Loop that creates an empty queue at each position in the mainProcessorArray
+    for (int i = 0; i < mainProcessorArray.length; i++) {
       mainProcessorArray[i] = new Queue();
     }
+
+    for (int i = 0; i < backupQueue.length(); i++) {
+      mainProcessorArray[0].enqueue(backupQueue.peekAnywhere(i+1));
+    }
+
+    // System.out.println("line 70");
+    // System.out.println(Arrays.toString(mainProcessorArray));
+    // System.out.println("Array length = "+mainProcessorArray.length);
+
+    // System.out.println("length = "+mainProcessorArray[0].length());
+    // System.out.println("line 73");
+
+    // // emptys main wait list before rebuilding between simulations
+    // if (mainProcessorArray[0].length()!=0) {
+    //   mainProcessorArray[0].dequeueAll();
+    // }
+
+    // // copies backupQueue into main waitlist but destroys
+    // // backupQueue in process
+    // for (int i = 0; i < numJobs; i++) {
+    //   Job tempJob = backupQueue.dequeue();
+    //   mainProcessorArray[0].enqueue(tempJob);
+    // }
+    //
+    // // rebuilds backupQueue
+    // for (int i = 0; i < numJobs; i++) {
+    //   Job tempJob = inputQueue.dequeue();
+    //   backupQueue.enqueue(tempJob);
+    // }
+    //
+    // // rebuilds inputQueue
+    // for (int i = 0; i < numJobs; i++) {
+    //   Job tempJob = backupQueue.dequeue();
+    //   inputQueue.enqueue(tempJob);
+    // }
+
+
+
+
+    // System.out.println("mainProcessorArray[0]"+mainProcessorArray[0].toString());
 
     // Formatted printing for output_trc file
     //************************************************************
@@ -74,17 +134,26 @@ public class Simulation{
     output_trc.println();
     //************************************************************
 
+    // System.out.println("*****************************");
+    // System.out.println(numProcessors+correctFormat);
+    // System.out.println("*****************************");
+    //
+    // System.out.println("time=0");
+    // printProcessorArray(mainProcessorArray, output_trc);
+    // System.out.println();
 
-    // keeps track of when the state of the main processor array
+
+    // Keeps track of when the state of the main processor array
     // changes so that we know when to print
     boolean stateChanged = false;
 
+    // Keeps track of the number of jobs left in the main wait queue
     int jobsLeft = mainProcessorArray[0].length();
 
     boolean allJobsComplete = false;
 
-    // loop that will run through the main wait queue and
-    // control the movement of jobs in the array
+    // Loop that will run through the main wait queue and control the
+    // movement of jobs in the array
     while(!allJobsComplete) {
       // only move jobs to processors if there are actually jobs left
       if (jobsLeft > 0) {
@@ -145,8 +214,10 @@ public class Simulation{
       // were started or finished at the current time
       if (stateChanged) {
         output_trc.println("time="+time);
+        // System.out.println("time="+time);
         printProcessorArray(mainProcessorArray, output_trc);
         output_trc.println();
+        // System.out.println();
         // reset the change state back to false so that output
         // is correctly printed
         stateChanged = false;
@@ -156,7 +227,7 @@ public class Simulation{
 
     totalWait = String.valueOf(mainProcessorArray[0].totalWaitTime());
     maxWait = String.valueOf(mainProcessorArray[0].maxWaitTime());
-    averageWait = String.valueOf(mainProcessorArray[0].averageWaitTime());
+    averageWait = mainProcessorArray[0].averageWaitTime();
     output_rpt.println(numProcessors+correctFormat+"totalWait="+totalWait+", "+"maxWait="+maxWait+", "+"averageWait ="+averageWait);
 
   }
@@ -210,7 +281,6 @@ public class Simulation{
       }
     }
 
-
     int numProcessors = numJobs-1;
 
     output_trc.println("Trace file: "+args[0]+".trc");
@@ -224,10 +294,12 @@ public class Simulation{
     output_rpt.println();
     output_rpt.println("***********************************************************");
 
+    // System.out.println("Got to line 245");
 
     // loop that runs simulations with 1 to numJobs-1 processors
     for (int i = 1; i < numJobs; i++) {
       testWithProcessors(i,originalInputQueue,output_trc,output_rpt);
+      // System.out.println("originalInputQueue in main in loop "+originalInputQueue.toString());
       originalInputQueue.resetJobFinishTimes();
     }
 
@@ -235,36 +307,5 @@ public class Simulation{
     in.close();
     output_trc.close();
     output_rpt.close();
-
-    //    1.  check command line arguments
-    //
-    //    2.  open files for reading and writing
-    //
-    //    3.  read in m jobs from input file
-    //
-    //    4.  run simulation with n processors for n=1 to n=m-1  {
-    //
-    //    5.      declare and initialize an array of n processor Queues and any
-    //            necessary storage Queues
-    //
-    //    6.      while unprocessed jobs remain  {
-    //
-    //    7.          determine the time of the next arrival or finish event and
-    //                update time
-    //
-    //    8.          complete all processes finishing now
-    //
-    //    9.          if there are any jobs arriving now, assign them to a processor
-    //                Queue of minimum length and with lowest index in the queue array.
-    //
-    //    10.     } end loop
-    //
-    //    11.     compute the total wait, maximum wait, and average wait for
-    //            all Jobs, then reset finish times
-    //
-    //    12. } end loop
-    //
-    //    13. close input and output files
-
   }
 }

@@ -5,6 +5,7 @@
 // Implements QueueInterface<T> and has methods that allow
 // easy operations on the Queue
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 class Queue implements QueueInterface {
 
@@ -85,6 +86,16 @@ class Queue implements QueueInterface {
     return head.job;
   }
 
+  public Job peekAnywhere(int position) {
+    Node tracer = head;
+    int counter = 1;
+    while(counter < position) {
+      tracer = tracer.next;
+      counter++;
+    }
+    return tracer.job;
+  }
+
   // dequeueAll()
   // sets this Queue to the empty state
   // pre: !isEmpty()
@@ -139,9 +150,13 @@ class Queue implements QueueInterface {
     return max;
   }
 
-  public double averageWaitTime() {
-    DecimalFormat dec = new DecimalFormat("#.00");
-    double average = (double)this.totalWaitTime()/(double)this.length();
-    return Double.valueOf(dec.format(average));
+  public String averageWaitTime() {
+    DecimalFormat dec = new DecimalFormat("0.00");
+    dec.setMinimumFractionDigits(2);
+    // NumberFormat nf = NumberFormat.getInstance();
+    // nf.setMinimumFractionDigits(2);
+    // nf.setMinimumFractionDigits(2);
+    double average = (double)this.totalWaitTime()/this.length();
+    return String.valueOf(dec.format(average));
   }
 }
