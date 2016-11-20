@@ -4,6 +4,8 @@
 // PA4
 // Implements QueueInterface<T> and has methods that allow
 // easy operations on the Queue
+import java.text.DecimalFormat;
+
 class Queue implements QueueInterface {
 
   private class Node {
@@ -113,5 +115,32 @@ class Queue implements QueueInterface {
       tracer.job.resetFinishTime();
       tracer = tracer.next;
     }
+  }
+
+  public int totalWaitTime(Queue mainWaitQueue) {
+    Node tracer = head;
+    int sum = 0;
+    while(tracer!=null) {
+      sum+=tracer.job.getWaitTime();
+      tracer = tracer.next;
+    }
+    return sum;
+  }
+
+  public int maxWaitTime(Queue mainWaitQueue) {
+    Node tracer = head;
+    int max = 0;
+    while(tracer!=null) {
+      if (tracer.job.getWaitTime() > max) {
+        max = tracer.job.getWaitTime();
+      }
+      tracer = tracer.next;
+    }
+    return max;
+  }
+
+  public double averageWaitTime(Queue mainWaitQueue) {
+    double average = totalWaitTime(mainWaitQueue)/(mainWaitQueue.length());
+    return average;
   }
 }

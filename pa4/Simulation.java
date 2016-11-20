@@ -23,6 +23,7 @@ public class Simulation{
     return new Job(a, d);
   }
 
+
   public static void printProcessorArray(Queue[] mainProcessorArray) {
     for (int i = 0; i < mainProcessorArray.length; i++) {
       System.out.println(i+": "+mainProcessorArray[i]);
@@ -188,23 +189,52 @@ public class Simulation{
 
   public static void main(String[] args) throws IOException{
 
-    int m = 3; // number of m jobs
-
-    // stuff that will be read from file later
-    int numJobs = m;
-    int numProcessors = m-1;
-
-    // read each job from input file
-    Job job1 = new Job(2,2);
-    Job job2 = new Job(3,4);
-    Job job3 = new Job(5,6);
-
+    int numJobs = 0;
+    int arrival = 0;
+    int duration = 0;
+    String fileName;
     // create a queue to store the original input
     // data and add each job to it
     Queue originalInputQueue = new Queue();
-    originalInputQueue.enqueue(job1);
-    originalInputQueue.enqueue(job2);
-    originalInputQueue.enqueue(job3);
+
+    // check number of command line arguments is at least 2
+    if (args.length < 1){
+      System.out.println("Usage: Simulation <input file>");
+      System.exit(1);
+    }
+    else {
+      // save the input file name so that we can write to output
+      // files with the same name
+      fileName = args[0];
+      // open file
+      Scanner in = new Scanner(new File(args[0]));
+      boolean firstLine = true;
+      int lineNumber = 1;
+
+      // read lines from in, write lines to out
+      while( in.hasNextLine() ){
+        if (firstLine) {
+          numJobs = Integer.parseInt(in.nextLine());
+          firstLine = false;
+          lineNumber++;
+        }
+        else {
+          String temp = in.nextLine();
+          if (!temp.isEmpty()) {
+            System.out.println("line read in ="+temp);
+            arrival = Integer.parseInt(temp.substring(0,1));
+            duration = Integer.parseInt(temp.substring(2));
+            Job tempJob = new Job(arrival, duration);
+            originalInputQueue.enqueue(tempJob);
+            lineNumber++;
+          }
+        }
+      }
+    }
+
+    int numProcessors = numJobs-1;
+
+    System.out.println("number of jobs = "+numJobs);
 
     System.out.println(originalInputQueue.length()+" Jobs:");
     System.out.println(originalInputQueue);
