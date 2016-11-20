@@ -29,6 +29,19 @@ public class Simulation{
     }
   }
 
+  public static boolean checkAllJobsComplete(Queue[] mainProcessorArray, int jobsLeft) {
+    boolean returnValue = false;
+    if (jobsLeft == 0) {
+      for (int i = 1; i< mainProcessorArray.length; i++) {
+        if (mainProcessorArray[i].length()>0) {
+          return false;
+        }
+      }
+      returnValue = true;
+    }
+    return returnValue;
+  }
+
   // runs the simulation with the specified number
   // of processors and prints out the info to the file
   public static void testWithProcessors(int numProcessors, Queue inputQueue) {
@@ -49,10 +62,6 @@ public class Simulation{
 
     // Formatted printing for output
     //************************************************************
-    System.out.println(mainProcessorArray[0].length()+" Jobs:");
-    System.out.println(mainProcessorArray[0]);
-    System.out.println();
-
     System.out.println("*****************************");
     String correctFormat = (numProcessors==1) ? " processor:" : " processors:";
     System.out.println(numProcessors+correctFormat);
@@ -69,12 +78,11 @@ public class Simulation{
 
     int jobsLeft = mainProcessorArray[0].length();
 
-    boolean jobsStillProcessing = true;
+    boolean allJobsComplete = false;
 
     // loop that will run through the main wait queue and
     // control the movement of jobs in the array
-    while(jobsStillProcessing) {
-
+    while(!allJobsComplete) {
       // only move jobs to processors if there are actually jobs left
       if (jobsLeft > 0) {
         // controls the movement of jobs that have yet to be processed
@@ -99,13 +107,14 @@ public class Simulation{
         }
       }
 
-      // controls the movement of curent jobs that processors
+
+      // controls the movement of current jobs that processors
       // are working on and checks if they are done at the
       // current time
       for (int i = 1; i < mainProcessorArray.length; i++) {
         if (mainProcessorArray[i].length() > 0) {
           Job currentJob = (Job) mainProcessorArray[i].peek();
-          if (currentJob.getFinish() == time) {
+          if (currentJob.getFinish() <= time) {
             // add the job back to the main storage queue which will
             // now contain both completed and uncompleted jobs
             mainProcessorArray[0].enqueue(currentJob);
@@ -123,19 +132,18 @@ public class Simulation{
               newJob.computeFinishTime(time);
 
             }
-
             stateChanged = true;
           }
         }
-        // exit loop if the first queue in the array is empty because
-        // all of the others will be empty as well
-        else {
-          if (jobsLeft==0) {
-            jobsStillProcessing = false;
-          }
-        }
+        allJobsComplete = checkAllJobsComplete(mainProcessorArray,jobsLeft);
       }
 
+      // System.out.println();
+      // System.out.println("state changed = "+stateChanged);
+      // System.out.println("time="+time);
+      // System.out.println("working processors = "+workingProcessors);
+      // printProcessorArray(mainProcessorArray);
+      // System.out.println();
       // prints out the state of all processors if any of the jobs
       // were started or finished at the current time
       if (stateChanged) {
@@ -149,9 +157,6 @@ public class Simulation{
       time++;
     }
 
-
-    // empty queue that will be added to as jobs complete
-    Queue completedQueue = new Queue();
   }
 
   // returns the index of the smallest queue in the processor array
@@ -201,18 +206,14 @@ public class Simulation{
     originalInputQueue.enqueue(job2);
     originalInputQueue.enqueue(job3);
 
+    System.out.println(originalInputQueue.length()+" Jobs:");
+    System.out.println(originalInputQueue);
+    System.out.println();
+
     for (int i = 1; i < numJobs; i++) {
       testWithProcessors(i,originalInputQueue);
       originalInputQueue.resetJobFinishTimes();
     }
-
-    // loop that runs through from 1 to numProcessors
-    // running the simulation each time
-    //  for (int i = 0; i < numProcessors; i++) {
-    //    testWithProcessors(i);
-    //  }
-
-
 
     //    1.  check command line arguments
     //

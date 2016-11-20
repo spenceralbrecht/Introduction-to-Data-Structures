@@ -4,20 +4,20 @@
 // PA4
 // Implements QueueInterface<T> and has methods that allow
 // easy operations on the Queue
-class Queue<T> implements QueueInterface<T> {
+class Queue implements QueueInterface {
 
-  private class Node<T> {
-    T job;
-    Node<T> next;
+  private class Node {
+    Job job;
+    Node next;
 
-    Node(T job) {
-      this.job = job;
+    Node(Object job) {
+      this.job = (Job) job;
       this.next = null;
     }
   }
 
-  private Node<T> head;
-  private Node<T> tail;
+  private Node head;
+  private Node tail;
   private int numItems;
 
   public Queue() {
@@ -44,8 +44,8 @@ class Queue<T> implements QueueInterface<T> {
   // adds newItem to back of this Queue
   // pre: none
   // post: !isEmpty()
-  public void enqueue(T newItem) {
-    Node<T> insertNode = new Node<T>(newItem);
+  public void enqueue(Object newItem) {
+    Node insertNode = new Node(newItem);
     // special case if it is the first node
     if (numItems==0) {
       head = tail = insertNode;
@@ -61,11 +61,11 @@ class Queue<T> implements QueueInterface<T> {
   // deletes and returns item from front of this Queue
   // pre: !isEmpty()
   // post: this Queue will have one fewer element
-  public T dequeue() throws QueueEmptyException {
+  public Job dequeue() throws QueueEmptyException {
     if (numItems < 1) {
       throw new QueueEmptyException("Queue.java Error: dequeue() called on empty queue");
     }
-    Node<T> tempNode = head;
+    Node tempNode = head;
     head = head.next;
     numItems--;
     return tempNode.job;
@@ -74,7 +74,7 @@ class Queue<T> implements QueueInterface<T> {
   // peek()
   // pre: !isEmpty()
   // post: returns item at front of Queue
-  public T peek() throws QueueEmptyException {
+  public Job peek() throws QueueEmptyException {
     if (numItems < 1) {
       throw new QueueEmptyException("Queue.java Error: peek() called on empty queue");
     }
@@ -98,7 +98,7 @@ class Queue<T> implements QueueInterface<T> {
   // toString()
   // overrides Object's toString() method
   public String toString() {
-    Node<T> tracer = head;
+    Node tracer = head;
     String returnString = "";
     while(tracer!=null) {
       returnString+=tracer.job.toString()+" ";
@@ -108,7 +108,7 @@ class Queue<T> implements QueueInterface<T> {
   }
 
   public void resetJobFinishTimes() {
-    Node<T> tracer = head;
+    Node tracer = head;
     while(tracer!=null) {
       tracer.job.resetFinishTime();
       tracer = tracer.next;
