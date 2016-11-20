@@ -155,29 +155,29 @@ public class Simulation{
     // Loop that will run through the main wait queue and control the
     // movement of jobs in the array
     while(!allJobsComplete) {
-      // only move jobs to processors if there are actually jobs left
-      if (jobsLeft > 0) {
-        // controls the movement of jobs that have yet to be processed
-        for (int i = 0; i < mainProcessorArray[0].length(); i++) {
-          Job nextJob = (Job) mainProcessorArray[0].peek();
-
-          // controls movement of jobs that need starting
-          if (nextJob.getArrival() == time) {
-            int indexShortestQueue = findSmallestQueue(mainProcessorArray);
-
-            // if the job is being added to an empty queue, it will
-            // not have to wait and so we can calculate the finish time
-            if (mainProcessorArray[indexShortestQueue].length()==0) {
-              nextJob.computeFinishTime(time);
-            }
-
-            mainProcessorArray[indexShortestQueue].enqueue(nextJob);
-            mainProcessorArray[0].dequeue();
-            stateChanged = true;
-            jobsLeft--;
-          }
-        }
-      }
+      // // only move jobs to processors if there are actually jobs left
+      // if (jobsLeft > 0) {
+      //   // controls the movement of jobs that have yet to be processed
+      //   for (int i = 0; i < mainProcessorArray[0].length(); i++) {
+      //     Job nextJob = (Job) mainProcessorArray[0].peek();
+      //
+      //     // controls movement of jobs that need starting
+      //     if (nextJob.getArrival() == time) {
+      //       int indexShortestQueue = findSmallestQueue(mainProcessorArray);
+      //
+      //       // if the job is being added to an empty queue, it will
+      //       // not have to wait and so we can calculate the finish time
+      //       if (mainProcessorArray[indexShortestQueue].length()==0) {
+      //         nextJob.computeFinishTime(time);
+      //       }
+      //
+      //       mainProcessorArray[indexShortestQueue].enqueue(nextJob);
+      //       mainProcessorArray[0].dequeue();
+      //       stateChanged = true;
+      //       jobsLeft--;
+      //     }
+      //   }
+      // }
 
 
       // controls the movement of current jobs that processors
@@ -208,6 +208,30 @@ public class Simulation{
           }
         }
         allJobsComplete = checkAllJobsComplete(mainProcessorArray,jobsLeft);
+      }
+
+      // only move jobs to processors if there are actually jobs left
+      if (jobsLeft > 0) {
+        // controls the movement of jobs that have yet to be processed
+        for (int i = 0; i < mainProcessorArray[0].length(); i++) {
+          Job nextJob = (Job) mainProcessorArray[0].peek();
+
+          // controls movement of jobs that need starting
+          if (nextJob.getArrival() == time) {
+            int indexShortestQueue = findSmallestQueue(mainProcessorArray);
+
+            // if the job is being added to an empty queue, it will
+            // not have to wait and so we can calculate the finish time
+            if (mainProcessorArray[indexShortestQueue].length()==0) {
+              nextJob.computeFinishTime(time);
+            }
+
+            mainProcessorArray[indexShortestQueue].enqueue(nextJob);
+            mainProcessorArray[0].dequeue();
+            stateChanged = true;
+            jobsLeft--;
+          }
+        }
       }
 
       // prints out the state of all processors if any of the jobs
