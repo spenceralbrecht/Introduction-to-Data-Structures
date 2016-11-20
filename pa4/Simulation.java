@@ -125,7 +125,7 @@ public class Simulation{
     // Formatted printing for output_trc file
     //************************************************************
     output_trc.println("*****************************");
-    String correctFormat = (numProcessors==1) ? " processor: " : " processors: ";
+    String correctFormat = (numProcessors==1) ? " processor:" : " processors:";
     output_trc.println(numProcessors+correctFormat);
     output_trc.println("*****************************");
 
@@ -252,7 +252,7 @@ public class Simulation{
     totalWait = String.valueOf(mainProcessorArray[0].totalWaitTime());
     maxWait = String.valueOf(mainProcessorArray[0].maxWaitTime());
     averageWait = mainProcessorArray[0].averageWaitTime();
-    output_rpt.println(numProcessors+correctFormat+"totalWait="+totalWait+", "+"maxWait="+maxWait+", "+"averageWait ="+averageWait);
+    output_rpt.println(numProcessors+correctFormat+" "+"totalWait="+totalWait+", "+"maxWait="+maxWait+", "+"averageWait="+averageWait);
 
   }
 
