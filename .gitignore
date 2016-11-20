@@ -1,3 +1,9 @@
+ex1
+ex2
+ex3
+ex4
+*.txt
+Simulation
 *.o
 DictionaryClient
 *IntegerStack
@@ -11,3 +17,7 @@ charType
 Search
 ListTest
 model-out
+input
+*.rpt
+*.trc
+QueueTest
