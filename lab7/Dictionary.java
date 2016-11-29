@@ -105,11 +105,11 @@ public class Dictionary implements DictionaryInterface {
       return P;
    }
 
-   public void printInOrder(Node root, String returnString) {
+   public void printInOrder(Node root) {
       if(root!=null){
-         printInOrder(root.left, returnString);
-         returnString+=root.key+" "+root.value;
-         printInOrder(root.right, returnString);
+         printInOrder(root.left);
+         System.out.println(root.key+" "+root.value);
+         printInOrder(root.right);
       }
    }
 
@@ -206,12 +206,8 @@ public class Dictionary implements DictionaryInterface {
    // overrides Object's toString() method
    // pre: none
    public String toString() {
-      String returnString = "";
-      if(root!=null){
-         printInOrder(root.left, returnString);
-         returnString+=root.key+" "+root.value;
-         printInOrder(root.right, returnString);
-      }
+      printInOrder(root);
+      return "";
    }
 
 }
