@@ -18,35 +18,37 @@ const int tableSize=105; // or some prime other than 101
 // rotate_left()
 // rotate the bits in an unsigned int
 unsigned int rotate_left(unsigned int value, int shift) {
-  int sizeInBits = 8*sizeof(unsigned int);
-  shift = shift & (sizeInBits - 1);
-  if ( shift == 0 ) {
-    return value;
-  }
-  return (value << shift) | (value >> (sizeInBits - shift));
+    int sizeInBits = 8*sizeof(unsigned int);
+    shift = shift & (sizeInBits - 1);
+    if ( shift == 0 ) {
+        return value;
+    }
+    return (value << shift) | (value >> (sizeInBits - shift));
 }
+
 // pre_hash()
 // turn a string into an unsigned int
 unsigned int pre_hash(char* input) {
-  unsigned int result = 0xBAE86554;
-  while (*input) {
-    result ^= *input++;
-    result = rotate_left(result, 5);
-  }
-  return result;
+    unsigned int result = 0xBAE86554;
+    while (*input) {
+        result ^= *input++;
+        result = rotate_left(result, 5);
+    }
+    return result;
 }
+
 // hash()
 // turns a string into an int in the range 0 to tableSize-1
 int hash(char* key){
-  return pre_hash(key)%tableSize;
+    return pre_hash(key)%tableSize;
 }
 
 // Creation of NodeObj data type
 typedef struct NodeObj{
-  char key[150];
-  char value[150];
-  struct NodeObj* next;
-  struct NodeObj* last;
+    char key[150];
+    char value[150];
+    struct NodeObj* next;
+    // struct NodeObj* last;
 } NodeObj;
 
 // Creation of type "Node" that points to NodeObj
@@ -55,11 +57,11 @@ typedef NodeObj* Node;
 // newNode()
 // constructor of the Node type
 Node newNode(char* key, char* value) {
-  Node node  = malloc(sizeof(NodeObj));
-  if(node==NULL) {
-    fprintf(stderr,
-      "malloc() failed when trying to allocate for a newNode\n");
-      exit(EXIT_FAILURE);
+    Node node  = malloc(sizeof(NodeObj));
+    if(node==NULL) {
+        fprintf(stderr,
+            "malloc() failed when trying to allocate for a newNode\n");
+        exit(EXIT_FAILURE);
     }
     strcpy(node->key, key);
     strcpy(node->value, value);
@@ -71,46 +73,56 @@ Node newNode(char* key, char* value) {
 // freeNode()
 // destructor for the Node type
 void freeNode(Node* pN){
-  if( pN!=NULL && *pN!=NULL ){
-    free(*pN);
-    *pN = NULL;
-  }
+    if( pN!=NULL && *pN!=NULL ){
+        free(*pN);
+        *pN = NULL;
+    }
 }
 
 // Creation of the DictionaryObj data type
 typedef struct DictionaryObj{
-  int numItems;
-  Node head;
-  Node tail;
+    int numItems;
+    // Node head;
+    // Node tail;
+    Node array[tableSize];
 } DictionaryObj;
 
 // Creation of type "Dictionary" that points to DictionaryObj
 typedef DictionaryObj* Dictionary;
 
 // findKey
-// returns the Node associated with the key or returns null
+// returns the Node associated with the key or returns null if no
 // such key k exists.
 // pre: none
 Node findKey(Dictionary dict, char* key) {
-  // If the dict is null or is empty return null
-  if (dict!=NULL && !isEmpty(dict)) {
-    // Create a new node that will travel through the linked
-    // list checking for matches
-    Node finder = dict->head;
-    // Loop through each node until the end of the list is reached
-    while(finder!=NULL) {
-      // Check the key on each node and compary to target.
-      // Return Node object if found
-      if (strcmp(finder->key, key)==0) {
-        return finder;
-      }
-      else {
-        finder = finder->next;
-      }
+    // If the dict is null or is empty return null
+    if (dict!=NULL && !isEmpty(dict)) {
+
+        int index = hash(key);
+
+        // Case if there are no collisions and the node is the only
+        // one at that array index
+        if(dict[index]->next==NULL) {
+            return dict[index];
+        }
+        // Case if chaining is used to avoid collisions and the linked
+        // list at that index needs to be searched
+        else {
+            finder = dict[index];
+            while(finder!=NULL) {
+                // Check the key on each node and compary to target.
+                // Return Node object if found
+                if (strcmp(finder->key, key)==0) {
+                    return finder;
+                }
+                else {
+                    finder = finder->next;
+                }
+            }
+        }
     }
-  }
-  // Only return null if the key was not found
-  return NULL;
+    // Only return null if the key was not found
+    return NULL;
 }
 
 // newDictionary()
