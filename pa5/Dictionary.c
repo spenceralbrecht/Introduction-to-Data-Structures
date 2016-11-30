@@ -135,8 +135,6 @@ Dictionary newDictionary(void) {
       exit(EXIT_FAILURE);
     }
     dict->numItems = 0;
-    dict->head = NULL;
-    dict->tail = NULL;
     return dict;
 }
 
@@ -279,20 +277,22 @@ void delete(Dictionary D, char* k){
 // re-sets D to the empty state.
 // pre: none
 void makeEmpty(Dictionary D){
-  if( D==NULL ){
-    fprintf(stderr,
-      "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
-      exit(EXIT_FAILURE);
+    if( D==NULL ){
+        fprintf(stderr,
+            "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
+            exit(EXIT_FAILURE);
+        }
+        for (int i = 0; i < tableSize; i++) {
+            Node tracer = D[i];
+            Node tempHead = D[i];
+            while(tracer!=NULL) {
+                tempHead = tempHead->next;
+                freeNode(&tracer);
+                tracer = tempHead;
+            }
+            D->numItems = 0;
+        }
     }
-    Node tempNode;
-    while(D->head!=NULL) {
-      tempNode = D->head;
-      D->head = D->head->next;
-      freeNode(&tempNode);
-    }
-    D->tail = NULL;
-    D->numItems = 0;
-  }
 
 // printDictionary()
 // pre: none
