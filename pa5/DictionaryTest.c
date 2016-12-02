@@ -1,4 +1,7 @@
 //-----------------------------------------------------------------------------
+// Spencer Albrecht
+// salbrech
+// PA 5
 // DictionaryTest.c
 // Test client for the Dictionary ADT
 //-----------------------------------------------------------------------------
@@ -16,7 +19,7 @@ int main(int argc, char* argv[]){
    char* k;
    char* v;
    char* word1[] = {"one","two","three","four","five","six","seven"};
-   char* word2[] = {"foo","bar","blah","galumph","happy","sad","blue"};
+   char* word2[] = {"a","b","c","d","e","f","g"};
    int i;
 
    for(i=0; i<7; i++){
@@ -35,8 +38,6 @@ int main(int argc, char* argv[]){
    // insert(A, "five", "glow"); // error: duplicate keys
 
    delete(A, "one");
-   delete(A, "three");
-   delete(A, "seven");
 
    printDictionary(stdout, A);
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]){
    }
 
    // // delete(A, "one");  // error: key not found
-   
+
    printf("%s\n", (isEmpty(A)?"true":"false"));
    printf("%d\n", size(A));
    makeEmpty(A);
