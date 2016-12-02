@@ -141,6 +141,7 @@ Dictionary newDictionary(void) {
 
 // freeDictionary()
 // destructor for the Dictionary type
+// pre: none
 void freeDictionary(Dictionary* pD){
   if( pD!=NULL && *pD!=NULL ){
     if(!isEmpty(*pD)) {
@@ -201,7 +202,7 @@ char* lookup(Dictionary D, char* k) {
 
 // insert()
 // inserts new (key,value) pair into D
-// pre: lookup(D, k)==NULL
+// pre: lookup(D, k)!=NULL
 void insert(Dictionary D, char* k, char* v) {
   // printf("line 204\n");
   if( D==NULL ){
@@ -270,6 +271,7 @@ void delete(Dictionary D, char* k){
             // Case if we are deleting the first Node
             if (D->array[index]==tracer) {
                 D->array[index]=NULL;
+                freeNode(&tracer);
                 // printf("line 269\n");
             }
             // Case if we are deleting the last Node
