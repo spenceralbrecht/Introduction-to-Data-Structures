@@ -1,9 +1,11 @@
+//-----------------------------------------------------------------------------
 // Spencer Albrecht
 // salbrech
 // Lab 7
 // Dictionary.java
 // All of the methods needed to implement a dictionary
 // with key value pairs as a binary search tree
+//-----------------------------------------------------------------------------
 public class Dictionary implements DictionaryInterface {
 
    // Private inner Node class
