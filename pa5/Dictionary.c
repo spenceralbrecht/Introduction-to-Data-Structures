@@ -11,9 +11,7 @@
 #include<string.h>
 #include<assert.h>
 #include"Dictionary.h"
-
-// private types --------------------------------------------------------------
-const int tableSize=101; // or some prime other than 101
+#define TABLE_SIZE 101
 
 // rotate_left()
 // rotate the bits in an unsigned int
@@ -38,9 +36,9 @@ unsigned int pre_hash(char* input) {
 }
 
 // hash()
-// turns a string into an int in the range 0 to tableSize-1
+// turns a string into an int in the range 0 to TABLE_SIZE-1
 int hash(char* key){
-    return pre_hash(key)%tableSize;
+    return pre_hash(key)%TABLE_SIZE;
 }
 
 // Creation of NodeObj data type
@@ -82,7 +80,7 @@ void freeNode(Node* pN){
 // Creation of the DictionaryObj data type
 typedef struct DictionaryObj{
     int numItems;
-    Node array[tableSize];
+    Node array[TABLE_SIZE];
 } DictionaryObj;
 
 // Creation of type "Dictionary" that points to DictionaryObj
@@ -303,7 +301,7 @@ void makeEmpty(Dictionary D){
             "Dictionary Error: calling makeEmpty() on NULL Dictionary reference\n");
             exit(EXIT_FAILURE);
         }
-        for (int i = 0; i < tableSize; i++) {
+        for (int i = 0; i < TABLE_SIZE; i++) {
             Node tracer = D->array[i];
             Node tempHead = D->array[i];
             while(tracer!=NULL) {
@@ -324,7 +322,7 @@ void printDictionary(FILE* out, Dictionary D){
       "Dictionary Error: calling printDictionary() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < tableSize; i++) {
+    for (int i = 0; i < TABLE_SIZE; i++) {
         Node tracer = D->array[i];
         while(tracer!=NULL) {
             fprintf(out, "%s %s\n", tracer->key, tracer->value);
