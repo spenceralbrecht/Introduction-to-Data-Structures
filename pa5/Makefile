@@ -3,10 +3,10 @@
 #------------------------------------------------------------------------------
 
 FLAGS   = -std=c99 -Wall
-SOURCES = Dictionary.c DictionaryTest.c
-OBJECTS = Dictionary.o DictionaryTest.o
+SOURCES = Dictionary.c DictionaryClient.c
+OBJECTS = Dictionary.o DictionaryClient.o
 HEADERS = Dictionary.h
-EXEBIN  = DictionaryTest
+EXEBIN  = DictionaryClient
 
 all: $(EXEBIN)
 

@@ -13,7 +13,7 @@
 #include"Dictionary.h"
 
 // private types --------------------------------------------------------------
-const int tableSize=105; // or some prime other than 101
+const int tableSize=101; // or some prime other than 101
 
 // rotate_left()
 // rotate the bits in an unsigned int
@@ -48,7 +48,7 @@ typedef struct NodeObj{
     char key[150];
     char value[150];
     struct NodeObj* next;
-    // struct NodeObj* last;
+    struct NodeObj* last;
 } NodeObj;
 
 // Creation of type "Node" that points to NodeObj
@@ -66,6 +66,7 @@ Node newNode(char* key, char* value) {
     strcpy(node->key, key);
     strcpy(node->value, value);
     node->next = NULL;
+    node->last = NULL;
     return(node);
 }
 
@@ -81,8 +82,6 @@ void freeNode(Node* pN){
 // Creation of the DictionaryObj data type
 typedef struct DictionaryObj{
     int numItems;
-    // Node head;
-    // Node tail;
     Node array[tableSize];
 } DictionaryObj;
 
@@ -98,23 +97,28 @@ Node findKey(Dictionary dict, char* key) {
     if (dict!=NULL && !isEmpty(dict)) {
 
         int index = hash(key);
-
+        // printf("the index for key: %s is %d\n", key, index);
+        // printf("line 99\n");
         // Case if there are no collisions and the node is the only
         // one at that array index
-        if(dict->array[index]->next==NULL) {
-            return dict->array[index];
+        if(dict->array[index]==NULL) {
+            // printf("line 103\n");
+            return NULL;
         }
         // Case if chaining is used to avoid collisions and the linked
         // list at that index needs to be searched
         else {
             Node finder = dict->array[index];
+            // printf("line 110\n");
             while(finder!=NULL) {
                 // Check the key on each node and compary to target.
                 // Return Node object if found
                 if (strcmp(finder->key, key)==0) {
+                    // printf("line 115\n");
                     return finder;
                 }
                 else {
+                    // printf("line 119\n");
                     finder = finder->next;
                 }
             }
@@ -178,31 +182,36 @@ int size(Dictionary D){
 // such value v exists.
 // pre: none
 char* lookup(Dictionary D, char* k) {
-  if( D==NULL ){
-    fprintf(stderr,
-      "Dictionary Error: calling lookup() on NULL Dictionary reference\n");
-      exit(EXIT_FAILURE);
+    if( D==NULL ){
+        fprintf(stderr,
+            "Dictionary Error: calling lookup() on NULL Dictionary reference\n");
+        exit(EXIT_FAILURE);
     }
     // Check if numItems = 0 to avoid calling findKey if not needed
     if (!isEmpty(D)) {
-      Node returnNode = findKey(D,k);
-      if (returnNode!=NULL) {
-        return returnNode->value;
-      }
+        // printf("line 188\n");
+        Node returnNode = findKey(D,k);
+        if (returnNode!=NULL) {
+            // printf("line 190\n");
+            return returnNode->value;
+        }
     }
-    // Returns null if Node was not found in list or if numItems = 0
+    // Returns null if Dictionary is empty
+    // printf("line 197\n");
     return NULL;
-  }
+}
 
 // insert()
 // inserts new (key,value) pair into D
 // pre: lookup(D, k)==NULL
 void insert(Dictionary D, char* k, char* v) {
+  // printf("line 204\n");
   if( D==NULL ){
     fprintf(stderr,
       "Dictionary Error: calling insert() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
   }
+  // printf("line 209\n");
   // Check if a Node with that key is already in the list,
   // if it is, print error message and exit
   if (lookup(D,k)!=NULL) {
@@ -219,13 +228,18 @@ void insert(Dictionary D, char* k, char* v) {
     if(D->array[index]==NULL) {
         Node temp = newNode(k,v);
         D->array[index] = temp;
+        D->numItems++;
     }
     // Case if chaining is used to avoid collisions and the linked
     // list at that index needs to be searched
     else {
         Node temp = newNode(k,v);
+        // Set the current head to the new node's next
         temp->next = D->array[index];
+        // Set the current head's last to the new node
+        D->array[index]->last = temp;
         D->array[index] = temp;
+        D->numItems++;
     }
   }
 }
@@ -249,16 +263,32 @@ void delete(Dictionary D, char* k){
   else {
     // Create a new Node a set it equal to the Node we want to delete
     Node tempNode = findKey(D,k);
+    int index = hash(k);
+    Node tracer = D->array[index];
 
-    for (int i = 0; i < tableSize; i++) {
-        if (D->array[i]==tempNode) {
-            if (i==0) {
-                D->array[0]= D->array[1];
+    // Loop that runs through link list at appropriate index
+    while(tracer!=NULL) {
+        if (tracer == tempNode) {
+            // Case if we are deleting the first Node
+            if (D->array[index]==tracer) {
+                D->array[index]=NULL;
+                // printf("line 269\n");
             }
+            // Case if we are deleting the last Node
+            else if (tracer->next==NULL) {
+                tracer->last->next = NULL;
+                freeNode(&tracer);
+                // printf("line 277\n");
+            }
+            // Case if we are deleting a middle Node
             else {
-                D->array[i-1]->next = D->array[i+1];
+                tracer->last->next = tracer->next;
+                tracer->next->last = tracer->last;
+                freeNode(&tracer);
+                // printf("line 282\n");
             }
         }
+        tracer = tracer->next;
     }
     D->numItems--;
   }
