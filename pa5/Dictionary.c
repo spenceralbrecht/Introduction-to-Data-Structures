@@ -65,7 +65,6 @@ Node newNode(char* key, char* value) {
     }
     strcpy(node->key, key);
     strcpy(node->value, value);
-    node->last = NULL;
     node->next = NULL;
     return(node);
 }
@@ -102,13 +101,13 @@ Node findKey(Dictionary dict, char* key) {
 
         // Case if there are no collisions and the node is the only
         // one at that array index
-        if(dict[index]->next==NULL) {
-            return dict[index];
+        if(dict->array[index]->next==NULL) {
+            return dict->array[index];
         }
         // Case if chaining is used to avoid collisions and the linked
         // list at that index needs to be searched
         else {
-            finder = dict[index];
+            Node finder = dict->array[index];
             while(finder!=NULL) {
                 // Check the key on each node and compary to target.
                 // Return Node object if found
@@ -208,27 +207,26 @@ void insert(Dictionary D, char* k, char* v) {
   // if it is, print error message and exit
   if (lookup(D,k)!=NULL) {
     fprintf(stderr,
-      "Dictionary Error: calling insert() on NULL Dictionary reference\n");
+      "Dictionary Error: calling insert() with duplicate keys\n");
       exit(EXIT_FAILURE);
   }
   else {
-    Node node = newNode(k, v);
-    // Properly insert at head of current linked list
-    if (!isEmpty(D)) {
-      node->next = D->head;
-      D->head->last = node;
+
+    int index = hash(k);
+
+    // Case if there are no collisions and the node is the only
+    // one at that array index
+    if(D->array[index]==NULL) {
+        Node temp = newNode(k,v);
+        D->array[index] = temp;
     }
-    // If this is the first Node in the list, set next and
-    // last appropriately
+    // Case if chaining is used to avoid collisions and the linked
+    // list at that index needs to be searched
     else {
-      node->next = NULL;
-      D->tail = node;
+        Node temp = newNode(k,v);
+        temp->next = D->array[index];
+        D->array[index] = temp;
     }
-    // Because we are inserting at head, our new Node's .last field
-    // will always be set to null
-    node->last = NULL;
-    D->head = node;
-    D->numItems++;
   }
 }
 
@@ -251,23 +249,16 @@ void delete(Dictionary D, char* k){
   else {
     // Create a new Node a set it equal to the Node we want to delete
     Node tempNode = findKey(D,k);
-    // Special case for if we are deleting the last Node in the list
-    if (D->tail==tempNode) {
-      D->tail = tempNode->last;
-      tempNode->last->next = NULL;
-      freeNode(&tempNode);
-    }
-    // Special case for deleting the first Node in the list
-    else if (D->head==tempNode) {
-      D->head = tempNode->next;
-      tempNode->next->last = NULL;
-      freeNode(&tempNode);
-    }
-    // General case for deleting a Node inside the list
-    else {
-      tempNode->last->next = tempNode->next;
-      tempNode->next->last = tempNode->last;
-      freeNode(&tempNode);
+
+    for (int i = 0; i < tableSize; i++) {
+        if (D->array[i]==tempNode) {
+            if (i==0) {
+                D->array[0]= D->array[1];
+            }
+            else {
+                D->array[i-1]->next = D->array[i+1];
+            }
+        }
     }
     D->numItems--;
   }
@@ -283,8 +274,8 @@ void makeEmpty(Dictionary D){
             exit(EXIT_FAILURE);
         }
         for (int i = 0; i < tableSize; i++) {
-            Node tracer = D[i];
-            Node tempHead = D[i];
+            Node tracer = D->array[i];
+            Node tempHead = D->array[i];
             while(tracer!=NULL) {
                 tempHead = tempHead->next;
                 freeNode(&tracer);
@@ -303,9 +294,11 @@ void printDictionary(FILE* out, Dictionary D){
       "Dictionary Error: calling printDictionary() on NULL Dictionary reference\n");
       exit(EXIT_FAILURE);
     }
-    Node temp = D->tail;
-    while(temp!=NULL) {
-      fprintf(out, "%s %s\n", temp->key, temp->value);
-      temp = temp->last;
+    for (int i = 0; i < tableSize; i++) {
+        Node tracer = D->array[i];
+        while(tracer!=NULL) {
+            fprintf(out, "%s %s\n", tracer->key, tracer->value);
+            tracer = tracer->next;
+        }
     }
   }
