@@ -27,3 +27,4 @@ input
 *.trc
 QueueTest
 Dictionary
+/.ssh
